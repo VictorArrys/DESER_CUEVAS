@@ -1,0 +1,7 @@
+# Librerias para ejecutar la API correctamente
+
+npm i express --save    
+npm install dotenv
+npm i --save rest-mssql-nodejs
+
+npm i --global yarn
