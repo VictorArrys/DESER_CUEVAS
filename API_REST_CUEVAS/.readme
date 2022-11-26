@@ -1,7 +1,11 @@
-# Librerias para ejecutar la API correctamente
+# Se debe installar las siguientes librerias para ejecutar la API correctamente
 
 npm i express --save    
 npm install dotenv
 npm i --save rest-mssql-nodejs
-
 npm i --global yarn
+npm install nodaemon
+npm install morgan
+
+# Organización de la API
+  #controllers cuenta con las funciones que tienen la funcionalidad

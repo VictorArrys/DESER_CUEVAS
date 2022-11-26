@@ -4,7 +4,7 @@
   "description": "",
   "main": "Cuevas_API.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "nodaemon src/ApiCuevas.js"
   },
   "keywords": [],
   "author": "",
@@ -12,6 +12,10 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "morgan": "^1.10.0",
     "rest-mssql-nodejs": "^1.0.10"
+  },
+  "devDependencies": {
+    "nodaemon": "^0.0.5"
   }
 }

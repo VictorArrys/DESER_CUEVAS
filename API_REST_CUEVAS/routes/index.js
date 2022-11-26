@@ -12,7 +12,7 @@ fs.readdirSync(pathRouter).filter((file) =>{
     const fileWithOutExt = removeExtension(file)
     const skip = ['index'].includes(fileWithOutExt)
     if(!skip){
-        router.use(`${fileWithOutExt}`, require(`./${fileWithOutExt}`))
+        router.use(`/${fileWithOutExt}`, require(`./${fileWithOutExt}`))
         console.log('CARGAR RUTA----------->', fileWithOutExt)
     }
 
@@ -21,7 +21,7 @@ fs.readdirSync(pathRouter).filter((file) =>{
 router.get('*', (req,res) => {
 
     res.status(404)
-    res.send({ error: 'Not found'})
+    res.send({ error: 'No se encontro la ruta buscada'})
 })
 
 module.exports = router

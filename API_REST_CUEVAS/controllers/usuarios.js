@@ -1,15 +1,16 @@
+
 const {httpError} = require('../utils/handleError')
 
-const getCliente = (req, res) => {
+const consultarUsuarios = (req, res) => {
     try{
-
+        res.send({list: [1, 2, 3, 4, 5, 6, 7]})
     }catch(exception){
         httpError(res, exception)
     }
 
 }
 
-const registrarCliente = (req, res) => {
+const registrarUsuario = (req, res) => {
     try{
 
     }catch(exception){
@@ -19,7 +20,7 @@ const registrarCliente = (req, res) => {
 }
     
 // modificarPerfil 
-const modificarCliente = (req, res) => {
+const modificarUsuario = (req, res) => {
     try{
 
     }catch(exception){
@@ -28,4 +29,4 @@ const modificarCliente = (req, res) => {
 
 }
 
-module.exports = {getCliente, registrarCliente, modificarCliente}
+module.exports = {consultarUsuarios, registrarUsuario, modificarUsuario}
