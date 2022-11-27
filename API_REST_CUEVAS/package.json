@@ -2,9 +2,9 @@
   "name": "api_rest_cuevas",
   "version": "1.0.0",
   "description": "",
-  "main": "Cuevas_API.js",
+  "main": "ApiCuevas.js",
   "scripts": {
-    "server": "nodaemon src/ApiCuevas.js"
+    "dev": "nodemon src/ApiCuevas.js"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +16,6 @@
     "rest-mssql-nodejs": "^1.0.10"
   },
   "devDependencies": {
-    "nodaemon": "^0.0.5"
+    "nodemon": "^1.18.9"
   }
 }
