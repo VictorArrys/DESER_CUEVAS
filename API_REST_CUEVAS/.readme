@@ -6,6 +6,7 @@ npm i --save rest-mssql-nodejs
 npm i --global yarn
 npm install nodaemon
 npm install morgan
+npm install --save express validator
 
 # Organización de la API
   #controllers cuenta con las funciones que tienen la funcionalidad

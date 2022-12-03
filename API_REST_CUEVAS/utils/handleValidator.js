@@ -8,6 +8,8 @@ const validateResults = (req, res, next) => {
 
     }catch(err){
         res.status(403)
-        res.send({ errors: err.array()})
+        res.send({ Errores: err.array()})
     }
 }
+
+module.exports = { validateResults }

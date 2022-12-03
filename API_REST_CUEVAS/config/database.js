@@ -7,5 +7,11 @@ const rest = new (require('rest-mssql-nodejs'))({
     database: config.database,
     port: config.port
 
+});
 
-})
+setTimeout(async () => {
+
+    const resultado = await rest.executeQuery('select     ')
+    
+
+}, 1500);

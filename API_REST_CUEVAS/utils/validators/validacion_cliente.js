@@ -1,11 +1,16 @@
-const { check } = require("express-validator")
-const validateResults = require("../handleValidator")
+const { check } = require('express-validator')
+const validateResults = require('../handleValidator')
 
-const validatorCreateClient = [
-    check("").exist().notEmpty().isLength({min:5, max:10}),
+const validarRegistrarCliente = [
+    check('name')
+    .exists()
+    .notEmpty()
+    .isLength({min:5, max:10}),
     (req, res, next) => {
         return validateResults(req, res, next)
     }
 ];
 
-module.exports = { validatorCreateClient }
+
+
+module.exports = { validarRegistrarCliente }
