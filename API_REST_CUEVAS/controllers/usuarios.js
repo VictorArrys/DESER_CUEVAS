@@ -1,6 +1,5 @@
 
 const {httpError} = require('../utils/handleError')
-const { MostrarError } = require("../utils/MensajesConsolaAPI");
 
 const iniciarSesion =  (req, res) => {
     // listo en api

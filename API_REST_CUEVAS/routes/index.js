@@ -16,12 +16,12 @@ fs.readdirSync(pathRouter).filter((file) =>{
         console.log('CARGAR RUTA----------->', fileWithOutExt)
     }
 
-})
+});
 
 router.get('*', (req,res) => {
 
     res.status(404)
     res.send({ error: 'No se encontro la ruta buscada'})
-})
+});
 
 module.exports = router

@@ -3,7 +3,7 @@ const mensajes = require("../utils/mensajes");
 const httpError = (res, err) => {
 
     var mensaje
-
+    /*
     switch (err) {
         case 500: 
         
@@ -18,14 +18,16 @@ const httpError = (res, err) => {
         201
         200
         422
-        */
+        
 
     }   
+
     console.log('--------------------------------------------------------------------------------------')
     console.log('Se ha presentado un problema en: ' + ubicacion)
     console.log('Error(es): ' + error)
     console.log('--------------------------------------------------------------------------------------')
 
+    */
         res.status(403)
         res.send({ Errores: err.array()})
 
