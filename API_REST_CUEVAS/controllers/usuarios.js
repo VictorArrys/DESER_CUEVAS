@@ -1,10 +1,11 @@
 
-const {httpError} = require('../utils/handleError')
+const {httpResponse} = require('../utils/handleError')
+const mensajes = require("../utils/mensajes");
 
 const iniciarSesion =  (req, res) => {
-    // listo en api
     const { correo, clave } = req.params;
 
+    /*
     var query =
       "SELECT * FROM -- WHERE correo = ? AND pass = ?";
 
@@ -46,6 +47,7 @@ const iniciarSesion =  (req, res) => {
         }
       }
     );
+    */
     
 
     /*
@@ -72,9 +74,21 @@ const iniciarSesion =  (req, res) => {
 }
 const consultarUsuarios = (req, res) => {
     try{
-        res.send({list: [1, 2, 3, 4, 5, 6, 7]})
+       
+        res.status(200)
+        res.send({
+            "resultAcction" : mensajes.accionExitosa,
+            responseAction:{ "list" : [1, 2, 3, 4, 5, 6, 7] }
+            })
+
+
     }catch(exception){
-        httpError(res, exception)
+        error = {
+            "code" : 500,
+            "detailsError" : exception.message
+        }
+
+        httpResponse(res, error)
     }
 
 }
@@ -84,9 +98,9 @@ const modificarUsuario = (req, res) => {
     try{
 
     }catch(exception){
-        httpError(res, exception)
+        httpResponse(res, exception)
     }
 
 }
 
-module.exports = {consultarUsuarios, modificarUsuario}
+module.exports = {consultarUsuarios, modificarUsuario, iniciarSesion}

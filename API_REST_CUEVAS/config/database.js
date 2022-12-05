@@ -1,17 +1,28 @@
-const config = require('./config')
+const sql = require ('mssql')
 
-const rest = new (require('rest-mssql-nodejs'))({
+/*const rest = new (require('rest-mssql-nodejs'))({
     user: config.user,
     password: config.password,
     server: config.server,
     database: config.database,
     port: config.port
 
-});
+});*/
 
-setTimeout(async () => {
+const configuracionDB = {
+    user: "sa",
+    password: "usagitsukino",
+    server: "localhost",
+    database: "SistemaReportesVehiculos",
+    port: 1433,
+    options: {
+        encrypt: false, 
+        trustServerCertificate: true,
+        enableArithAbrot: true,
+        trustedconnection: false,
+        instancename: 'LOCALHOST'
+    },
+}
 
-    const resultado = await rest.executeQuery('select     ')
-    
 
-}, 1500);
+module.exports = configuracionDB;

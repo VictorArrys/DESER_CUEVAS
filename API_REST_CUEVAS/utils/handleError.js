@@ -1,38 +1,48 @@
 const mensajes = require("../utils/mensajes");
 
-const httpError = (res, err) => {
+const httpResponse = (res, err) => {
 
-    var mensaje
-    /*
-    switch (err) {
+    var mensaje, code
+
+    code = err["code"]
+
+    switch (err["code"]) {
         case 500: 
-        
-
-        /*
+            mensaje = mensajes.errorInterno;
+            break; 
        
-        500
-        400
-        401
-        403
-        404
-        201
-        200
-        422
-        
+        case 400:
+            mensaje = mensajes.peticionIncorrecta;
+            break; 
+
+        case 401:
+            mensaje = mensajes.tokenInvalido;
+            break; 
+
+        case 403:
+            mensaje = mensajes.prohibido;
+            break; 
+
+        case 404:
+            mensaje = mensajes.peticionNoEncontrada;
+            break; 
+
+        case 422:
+            mensaje = mensajes.instruccionNoProcesada;
+            break; 
 
     }   
 
+    
     console.log('--------------------------------------------------------------------------------------')
-    console.log('Se ha presentado un problema en: ' + ubicacion)
-    console.log('Error(es): ' + error)
+    console.log('Se ha presentado un problema')
+    console.log('Error: ' + mensaje["type error"])
     console.log('--------------------------------------------------------------------------------------')
-
-    */
-        res.status(403)
-        res.send({ Errores: err.array()})
-
-    res.send({ error: 'Sucedio un error interno del servidor'})
-    console.log({ error: 'Sucedio un error interno del servidor'})
+    res.status(code)
+    res.send({ 
+        status: code,
+        mensaje})
+    
 }
 
-module.exports = { httpError }
+module.exports = { httpResponse }
