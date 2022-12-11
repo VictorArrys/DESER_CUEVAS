@@ -1,15 +1,25 @@
 const express = require('express')
 const router = express.Router()
-const {consultarProductos, consultarCatalogoProductos, registrarProducto, modificarProducto} = require('../controllers/producto')
+const {consultarProductos, consultarCatalogoProductos, registrarProducto, agregarProductoInventario, modificarProducto} = require('../controllers/producto')
 
+// ? POST request 
+// ! http://localhost:3001/api/abarrotes_cuevas/1.0/productos
+router.post('/', registrarProducto)
 
-router.post('/productos/', registrarProducto)
+// ? POST request 
+// ! http://localhost:3001/api/abarrotes_cuevas/1.0/productos/:idSucursal/:idProducto
+router.post('/:idSucursal/:idProducto', agregarProductoInventario)
 
-router.get('/productos/', consultarProductos)
+// ? GET request
+// ! http://localhost:3001/api/abarrotes_cuevas/1.0/productos
+router.get('/', consultarProductos)
 
-//Consultar producto de lado del cliente
-router.get('/sucursal/:idSucursal/:idProduct', consultarCatalogoProductos)
+// ? GET request Consultar productos de lado del cliente
+// ! http://localhost:3001/api/abarrotes_cuevas/1.0/productos/:idSucursal
+router.get('/sucursal/:idSucursal/', consultarCatalogoProductos)
 
-router.patch('/productos/:idProduct', modificarProducto)
+// ? PATCH request
+// ! http://localhost:3001/api/abarrotes_cuevas/1.0/productos/:idProducto
+router.patch('/:idProducto', modificarProducto)
 
 module.exports = router;

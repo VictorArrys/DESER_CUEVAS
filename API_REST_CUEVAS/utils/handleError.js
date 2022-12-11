@@ -3,12 +3,15 @@ const mensajes = require("../utils/mensajes");
 const httpResponse = (res, err) => {
 
     var mensaje, code
+    var detallesError = err["detailsError"]
 
     code = err["code"]
 
     switch (err["code"]) {
         case 500: 
-            mensaje = mensajes.errorInterno;
+            mensaje = { mensaje: mensajes.errorInterno,
+                        error: detallesError
+                    };
             break; 
        
         case 400:
@@ -32,16 +35,21 @@ const httpResponse = (res, err) => {
             break; 
 
     }   
-
     
     console.log('--------------------------------------------------------------------------------------')
     console.log('Se ha presentado un problema')
     console.log('Error: ' + mensaje["type error"])
+    console.log('Detalles: ' + err["detailsError"])
     console.log('--------------------------------------------------------------------------------------')
+
+    
     res.status(code)
     res.send({ 
         status: code,
-        mensaje})
+        mensaje
+        }
+        )
+
     
 }
 

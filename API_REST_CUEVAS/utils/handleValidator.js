@@ -8,6 +8,11 @@ const validateResults = (req, res, next) => {
 
     }catch(err){
         res.status(403)
+        console.log('--------------------------------------------------------------------------------------')
+        console.log('Se ha presentado un problema')
+        console.log('Error(es): ' + err.array())
+        console.log('--------------------------------------------------------------------------------------')
+
         res.send({ Errores: err.array()})
     }
 }

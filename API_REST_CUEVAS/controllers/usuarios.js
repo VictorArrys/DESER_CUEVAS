@@ -1,94 +1,102 @@
-
 const {httpResponse} = require('../utils/handleError')
 const mensajes = require("../utils/mensajes");
+var mysqlConnection = require("../config/conexion");
+const GestionToken = require("../config/generateToken");
 
 const iniciarSesion =  (req, res) => {
     const { correo, clave } = req.params;
-
-    /*
-    var query =
-      "SELECT * FROM -- WHERE correo = ? AND pass = ?";
+    var query = "SELECT correo, clave, tipo, nombre FROM usuario WHERE correo = ? AND clave = ?";
 
     mysqlConnection.query(
-      query,
-      [correo, clave],
+      query,[correo, clave],
       (error, resultadoInicio) => {
         if (error) {
-          callback(500, mensajes.errorInterno);
+          httpResponse(res, error = {"code" : 500, "detailsError" : error})
+          
         }else if (resultadoInicio.length == 0) {
           console.log(
             "¡Credenciales incorrectas! Probablemente el usuario no exista o estan mal sus credenciales"
           );
-          callback(404, mensajes.peticionNoEncontrada);
-        }else if (resultadoInicio[0]['tipo_usuario'] == 'Empleador' && resultadoInicio[0]['estatus'] == 3){
-          callback(403, mensajes.prohibido)
-        } else {
-          console.log("¡Inicio de sesión exitosa!");
+          httpResponse(res, error = {"code" : 404, "detailsError" : ""})
+          
+        }else {
+
           var usuario = resultadoInicio[0];
-          var arrayFotografia = null;
-          if (usuario.fotografia == null) {
-            console.log("Fotografia vacia, se procede a poner null");
-          } else {
-            arrayFotografia = Uint8ClampedArray.from(
-              Buffer.from(usuario.fotografia.buffer, "base64")
-            );
+          var tipoUsuario
+          switch (usuario.tipo){
+            case 1:
+              tipoUsuario = "Administrador";
+              break;
+            case 2:
+                tipoUsuario = "Empleado";
+                break;
+            case 3:
+                  tipoUsuario = "Cliente";
+                  break;
+            
           }
 
-          var usuarioConectado = new Usuario();
-          usuarioConectado.clave = usuario["clave"];
-          usuarioConectado.estatus = usuario["estatus"];
-          usuarioConectado.idPerfilUsuario = usuario["id_perfil_usuario"];
-          usuarioConectado.correoElectronico = usuario["correo_electronico"];
-          usuarioConectado.fotografia = arrayFotografia;
-          usuarioConectado.nombre = usuario["nombre_usuario"];
-          usuarioConectado.tipoUsuario = usuario["tipo_usuario"];
-
-          callback(200, usuarioConectado);
-        }
-      }
-    );
-    */
-    
-
-    /*
-    
-    AccesoSistema.iniciarSesion(
-      nombreUsuario,
-      clave,
-      (codigoRespuesta, cuerpoRespuesta) => {
-        if (codigoRespuesta == 200) {
           const payloadToken = {
-            idUsuario: cuerpoRespuesta.idPerfilUsuario,
-            clave: cuerpoRespuesta.clave,
-            tipo: cuerpoRespuesta.tipoUsuario,
-            estatus: cuerpoRespuesta.estatus
+            correo: usuario.correo,
+            clave: usuario.clave,
+            tipo: tipoUsuario
           };
-          var token = GestionToken.CrearToken(payloadToken);
+          var token = GestionToken.CrearToken(payloadToken);        
+
+          console.log("¡Inicio sesión el usuario: " + mensajes.accionExitosa + usuario.nombre);
+
           res.setHeader("x-access-token", token);
+          res.status(200).json(usuario);
+          
         }
-        res.status(codigoRespuesta).json(cuerpoRespuesta);
       }
     );
-    
-    */
+
+
 }
 const consultarUsuarios = (req, res) => {
     try{
-       
-        res.status(200)
-        res.send({
-            "resultAcction" : mensajes.accionExitosa,
-            responseAction:{ "list" : [1, 2, 3, 4, 5, 6, 7] }
-            })
+      const token = req.headers["x-access-token"];
+      var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Administrador");
 
+      if (respuesta.statusCode == 200) {
+        var query = "SELECT * FROM usuario"    
+        
+        mysqlConnection.query(
+          query,
+          (error, resultadoInicio) => {
+            if (error) {
+              httpResponse(res, error = {"code" : 500, "detailsError" : error})
+              
+            }else if (resultadoInicio.length == 0) {
+              console.log(
+                "¡Sin registros!"
+              );
+              httpResponse(res, error = {"code" : 404, "detailsError" : ""})
+              
+            }else {
+    
+              var usuariosConsultados = resultadoInicio;
+    
+              res.status(200).json(usuariosConsultados);
+              
+            }
+          }
+        );
 
-    }catch(exception){
-        error = {
-            "code" : 500,
-            "detailsError" : exception.message
-        }
+      }else if (respuesta.statusCode == 401) {
+        res.status(401);
+        httpResponse(res, error = {"code" : 401, "detailsError" : ""})
+        
+      } else {
 
-        httpResponse(res, error)
+        httpResponse(res, error = {"code" : 500, "detailsError" : "Hubo un problema al validar el token"})
+
+      }   
+
+    }catch(exception){       
+        httpResponse(res, error = {"code" : 500, "detailsError" : exception.message})
+
     }
 
 }
@@ -96,11 +104,57 @@ const consultarUsuarios = (req, res) => {
 // modificarPerfil 
 const modificarUsuario = (req, res) => {
     try{
+      const token = req.headers["x-access-token"];
+      var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Administrador");
 
-    }catch(exception){
-        httpResponse(res, exception)
+      if (respuesta.statusCode == 200 && req.body.tipo == 2) {
+        const { idUsuario } = req.params
+        const usuarioModificado = req.body
+        console.log(usuarioModificado)
+      
+        var query = "UPDATE usuario SET nombre = ?, primerApellido = ?, segundoApellido = ?, correo = ?, clave = ? WHERE idUsuario = ?; "    
+        
+        mysqlConnection.query(
+          query,[usuarioModificado.nombre,usuarioModificado.primerApellido,usuarioModificado.segundoApellido,
+            usuarioModificado.correo,usuarioModificado.clave, idUsuario],
+          (error, resultadoInicio) => {
+            if (error) {
+              httpResponse(res, error = {"code" : 500, "detailsError" : "Error en modificar debido a: " + error})
+              
+            }else if (resultadoInicio.length == 0) {
+              console.log(
+                "¡Sin registros!"
+              );
+              httpResponse(res, error = {"code" : 404, "detailsError" : ""})
+              
+            }else {
+    
+              var usuariosConsultados = resultadoInicio;
+    
+              res.status(201)
+              res.send();
+              
+            }
+          }
+        );
+
+      }else if (req.body.tipo !== 2) {
+        res.status(403);
+        httpResponse(res, error = {"code" : 403, "detailsError" : "Acceso no autorizado para editar otro tipo de usuario que no sea empleado"})
+      }else if (respuesta.statusCode == 401) {
+        res.status(401);
+        httpResponse(res, error = {"code" : 401, "detailsError" : ""})
+        
+      } else {
+
+        httpResponse(res, error = {"code" : 500, "detailsError" : "Hubo un problema al validar el token"})
+
+      }   
+
+    }catch(exception){       
+        httpResponse(res, error = {"code" : 500, "detailsError" : exception.message})
+
     }
-
 }
 
 module.exports = {consultarUsuarios, modificarUsuario, iniciarSesion}

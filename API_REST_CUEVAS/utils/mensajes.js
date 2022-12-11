@@ -41,7 +41,6 @@ exports.accionExitosa = {
 
 //422
 exports.instruccionNoProcesada = {
-    "type error" : {
-        "message" : "solicitud no procesada"
-        }
+    "type error" : "Solicitud no procesada"
+        
 }
