@@ -3,6 +3,7 @@ const mensajes = require("../utils/mensajes");
 var mysqlConnection = require("../config/conexion");
 const GestionToken = require("../config/generateToken");
 
+
 const consultarProductos = (req, res) => {
     try{
         const token = req.headers["x-access-token"];
@@ -107,6 +108,9 @@ const registrarProducto = (req, res) => {
   
         if (respuesta.statusCode == 200) {
             const producto  = req.body;
+            var imagen = req.file
+            console.log(imagen)
+            console.log("Body")
             console.log(producto)
           
             var query = "INSERT INTO producto" +
@@ -121,15 +125,27 @@ const registrarProducto = (req, res) => {
                 httpResponse(res, error = {"code" : 500, "detailsError" : error})
               
               }else {
-                console.log(resultadoRegistro)
-                var productoCreado;
-                productoCreado ={
-                  mensaje: mensajes.accionExitosa, 
-                  'insertado': resultadoRegistro['affectedRows']
+
+                var query2 = "INSERT INTO fotografia(archivo,null,tipo,codigoBarras) VALUES(?,?,?)"
+                mysqlConnection.query(
+                  query2,[imagen, 2 ,producto.codigoBarras],
+                  (error, resultadoRegistro) => {
+                    if (error) {
+                      httpResponse(res, error = {"code" : 500, "detailsError" : error})
+                    
+                    }else { 
+                      console.log(resultadoRegistro)
+                            var productoCreado;
+                            productoCreado ={
+                              mensaje: mensajes.accionExitosa, 
+                              'insertado': resultadoRegistro['affectedRows']
+                              }
+                            
+                            res.status(201).json(productoCreado);
+                     
+                    }
                   }
-                
-                res.status(201).json(productoCreado);
-                
+                );
               }
             }
           );

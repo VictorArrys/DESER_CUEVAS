@@ -1,10 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const {consultarProductos, consultarCatalogoProductos, registrarProducto, agregarProductoInventario, modificarProducto} = require('../controllers/producto')
+const multer = require('multer');
+const upload = multer({ dest : 'uploads/'})
 
 // ? POST request 
 // ! http://localhost:3001/api/abarrotes_cuevas/1.0/productos
-router.post('/', registrarProducto)
+router.post('/',upload.single('imagen'), registrarProducto)
 
 // ? POST request 
 // ! http://localhost:3001/api/abarrotes_cuevas/1.0/productos/:idSucursal/:idProducto

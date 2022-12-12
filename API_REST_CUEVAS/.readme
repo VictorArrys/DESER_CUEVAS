@@ -7,6 +7,10 @@ npm i --global yarn
 npm install nodaemon
 npm install morgan
 npm install --save express validator
+npm i --save multer 
+npm i jsonwebtoken   
+npm i mysql
+npm i nodemon        
 
 # Organización de la API
   #controllers cuenta con las funciones que tienen la funcionalidad
