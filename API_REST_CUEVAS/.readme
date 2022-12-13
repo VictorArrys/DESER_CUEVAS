@@ -13,4 +13,4 @@ npm i mysql
 npm i nodemon        
 
 # Organización de la API
-  #controllers cuenta con las funciones que tienen la funcionalidad
+#controllers cuenta con las funciones que tienen la funcionalidad

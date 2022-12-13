@@ -108,33 +108,22 @@ const registrarProducto = (req, res) => {
   
         if (respuesta.statusCode == 200) {
             const producto  = req.body;
-            var imagen = req.file
+            var imagen = req.file.buffer
             console.log(imagen)
             console.log("Body")
-            console.log(producto)
+            console.log(producto)            
           
-            var query = "INSERT INTO producto" +
-            "(codigoBarras, descripcion, ciudad, estatus, precioVenta, precioCompra,idCatagoria, nombre)" +
-            " VALUES (?,?,?,?,?,?,?,?);"    
+            var query = "CALL nuevoProducto(?,?,?,?,?,?,?,?,?,?);"              
           
           mysqlConnection.query(
             query,[producto.codigoBarras, producto.descripcion, producto.ciudad, producto.estatus, 
-              producto.precioVenta, producto.precioCompra, producto.idCatagoria, producto.nombre],
+              producto.precioVenta, producto.precioCompra, producto.idCatagoria, producto.nombre,imagen,2],
             (error, resultadoRegistro) => {
               if (error) {
                 httpResponse(res, error = {"code" : 500, "detailsError" : error})
               
               }else {
-
-                var query2 = "INSERT INTO fotografia(archivo,null,tipo,codigoBarras) VALUES(?,?,?)"
-                mysqlConnection.query(
-                  query2,[imagen, 2 ,producto.codigoBarras],
-                  (error, resultadoRegistro) => {
-                    if (error) {
-                      httpResponse(res, error = {"code" : 500, "detailsError" : error})
-                    
-                    }else { 
-                      console.log(resultadoRegistro)
+                console.log(resultadoRegistro)
                             var productoCreado;
                             productoCreado ={
                               mensaje: mensajes.accionExitosa, 
@@ -142,13 +131,10 @@ const registrarProducto = (req, res) => {
                               }
                             
                             res.status(201).json(productoCreado);
-                     
-                    }
-                  }
-                );
+              
               }
             }
-          );
+          ); 
   
         }else if (respuesta.statusCode == 401) {
           res.status(401);

@@ -1,4 +1,7 @@
 const {httpResponse} = require('../utils/handleError')
+const mensajes = require("../utils/mensajes");
+var mysqlConnection = require("../config/conexion");
+const GestionToken = require("../config/generateToken");
 
 const consultarProductos = (req, res) => {
     

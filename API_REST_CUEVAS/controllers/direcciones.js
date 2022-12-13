@@ -109,8 +109,7 @@ const registrarDireccion = (req, res) => {
         var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente");
   
         if (respuesta.statusCode == 200) {
-          const { idUsuario } = req.params
-          const { producto } = req.body
+          const { direccion } = req.body
           
           var query = ""    
           

@@ -127,11 +127,8 @@ const modificarUsuario = (req, res) => {
               );
               httpResponse(res, error = {"code" : 404, "detailsError" : ""})
               
-            }else {
-    
-              var usuariosConsultados = resultadoInicio;
-    
-              res.status(201)
+            }else {    
+              res.status(204)
               res.send();
               
             }

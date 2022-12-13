@@ -1,15 +1,17 @@
 const {httpResponse} = require('../utils/handleError')
+const mensajes = require("../utils/mensajes");
+var mysqlConnection = require("../config/conexion");
+const GestionToken = require("../config/generateToken");
 
 const consultarSucursales = (req, res) => {
     
     try{
         const token = req.headers["x-access-token"];
-        var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente");
+        var respuesta = GestionToken.ValidarToken(token);
   
         if (respuesta.statusCode == 200) {
-          const { idUsuario } = req.params
           
-          var query = ""    
+          var query = "SELECT * FROM sucursal"    
           
           mysqlConnection.query(
             query,
@@ -25,9 +27,12 @@ const consultarSucursales = (req, res) => {
                 
               }else {
       
-                var usuariosConsultados = resultadoInicio;
+                var resultadoConsulta ={
+                    mensaje : mensajes.accionExitosa,
+                    resultadoInicio
+                    };
       
-                res.status(200).json(mensajes.accionExitosa,usuariosConsultados);
+                res.status(200).json(resultadoConsulta);
                 
               }
             }
@@ -49,3 +54,5 @@ const consultarSucursales = (req, res) => {
       }
 
 }
+
+module.exports = {consultarSucursales}
