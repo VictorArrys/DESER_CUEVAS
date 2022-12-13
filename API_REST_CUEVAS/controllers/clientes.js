@@ -57,9 +57,28 @@ const getCliente = (req, res) => {
 
 const registrarCliente = (req, res) => {
     try{
+      const cliente = req.body;
+      console.log(cliente)
+      var query = 'CALL registrarCliente(?,?,?,?,?,?,?,?);'
 
+
+      mysqlConnection.query(query, [cliente.nombre, cliente.primerApellido, cliente.segundoApellido, cliente.correo,
+      cliente.clave,3, cliente.noCelular, cliente.fechaNacimiento], (error, resultadoRegistro) =>{
+        if (error){
+          httpResponse(res, error = {"code" : 500, "detailsError" : error})
+        }else{
+          console.log(resultadoRegistro)
+          var clienteCreado;
+          clienteCreado = {
+            mensaje: mensajes.accionExitosa,
+            'insertado' : resultadoRegistro['affectedRows']
+          }
+
+          res.status(201).json(clienteCreado);
+        }
+      })
     }catch(exception){
-        httpError(res, exception)
+      httpResponse(res, error = {"code" : 500, "detailsError" : exception.message})
     }
 
 }
@@ -67,9 +86,14 @@ const registrarCliente = (req, res) => {
 // modificarPerfil 
 const modificarCliente = (req, res) => {
     try{
-
+      const token = req.headers["x-access-token"];
+      var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente");
+      
+      if (respuesta.statusCode == 200){
+        
+      }
     }catch(exception){
-        httpError(res, exception)
+      httpResponse(res, error = {"code" : 500, "detailsError" : exception.message})
     }
 
 }
