@@ -1,4 +1,7 @@
 const {httpResponse} = require('../utils/handleError')
+const mensajes = require("../utils/mensajes");
+var mysqlConnection = require("../config/conexion");
+const GestionToken = require("../config/generateToken");
 
 const consultarDireccion = (req, res) => {
     
@@ -7,12 +10,14 @@ const consultarDireccion = (req, res) => {
         var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente");
   
         if (respuesta.statusCode == 200) {
-          const { idUsuario, idDireccion } = req.params
+          const { idCliente, idDireccion } = req.params
           
-          var query = ""    
+          var query = "SELECT direccion.*,direccioncliente.idCliente FROM direccion "+
+          "INNER JOIN direccioncliente ON direccioncliente.idDireccion = direccion.idDireccion " + 
+          " WHERE direccioncliente.idCliente = ? AND direccion.idDireccion = ?"  
           
           mysqlConnection.query(
-            query,
+            query,[idCliente, idDireccion],
             (error, resultadoInicio) => {
               if (error) {
                 httpResponse(res, error = {"code" : 500, "detailsError" : error})
@@ -25,9 +30,12 @@ const consultarDireccion = (req, res) => {
                 
               }else {
       
-                var usuariosConsultados = resultadoInicio;
+                var direccionConsultada = {
+                  mensaje: mensajes.accionExitosa,
+                  respuesta: resultadoInicio
+                }
       
-                res.status(200).json(mensajes.accionExitosa,usuariosConsultados);
+                res.status(200).json(direccionConsultada);
                 
               }
             }
@@ -58,12 +66,14 @@ const consultarDirecciones = (req, res) => {
         var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente");
   
         if (respuesta.statusCode == 200) {
-          const { idUsuario } = req.params
+          const { idCliente } = req.params
           
-          var query = ""    
+          var query = "SELECT direccion.*,direccioncliente.idCliente FROM direccion "+
+          "INNER JOIN direccioncliente ON direccioncliente.idDireccion = direccion.idDireccion " + 
+          " WHERE direccioncliente.idCliente = ?"   
           
           mysqlConnection.query(
-            query,
+            query,[idCliente],
             (error, resultadoInicio) => {
               if (error) {
                 httpResponse(res, error = {"code" : 500, "detailsError" : error})
@@ -76,9 +86,12 @@ const consultarDirecciones = (req, res) => {
                 
               }else {
       
-                var usuariosConsultados = resultadoInicio;
+                var direcciones = {
+                  mensaje: mensajes.accionExitosa,
+                  respuesta: resultadoInicio
+                }
       
-                res.status(200).json(mensajes.accionExitosa,usuariosConsultados);
+                res.status(200).json(direcciones);
                 
               }
             }
@@ -109,12 +122,17 @@ const registrarDireccion = (req, res) => {
         var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente");
   
         if (respuesta.statusCode == 200) {
-          const { direccion } = req.body
+          const { idCliente } = req.params;
+          const direccion = req.body;
           
-          var query = ""    
+          var query = "INSERT INTO direccion" + 
+          "(calle, noExterior, noInterior,colonia,codigoPostal,municipio," + 
+          "entidadFederativa, latitud, longitud) VALUES(?,?,?,?,?,?,?,?,?)"    
           
           mysqlConnection.query(
-            query,
+            query,[direccion.calle, direccion.noExterior, direccion.noInterior, direccion.colonia,
+              direccion.codigoPostal, direccion.municipio, direccion.entidadFederativa, direccion.latitud,
+              direccion.longitud],
             (error, resultadoInicio) => {
               if (error) {
                 httpResponse(res, error = {"code" : 500, "detailsError" : error})
@@ -127,9 +145,34 @@ const registrarDireccion = (req, res) => {
                 
               }else {
       
-                var usuariosConsultados = resultadoInicio;
-      
-                res.status(200).json(mensajes.accionExitosa,usuariosConsultados);
+                var idDireccion = resultadoInicio['insertId']
+                
+                var query = "INSERT INTO direccioncliente" + 
+                "(idDireccion, idCliente) VALUES(?,?)"
+                mysqlConnection.query(
+                  query,[idDireccion,idCliente],
+                  (error, resultadoInicio) => {
+                    if (error) {
+                      httpResponse(res, error = {"code" : 500, "detailsError" : error})
+                      
+                    }else if (resultadoInicio.length == 0) {
+                      console.log(
+                        "¡Sin registros!"
+                      );
+                      httpResponse(res, error = {"code" : 404, "detailsError" : ""})
+                      
+                    }else {
+                      var direccionCreada =  {
+                        mensaje: mensajes.accionExitosa,
+                        'insertado': resultadoInicio['affectedRows']
+                      };            
+                      res.status(201).json(direccionCreada);
+                      
+                      
+                    }
+                  }
+                );
+                
                 
               }
             }
@@ -158,13 +201,18 @@ const modificarDireccion = (req, res) => {
         var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente");
   
         if (respuesta.statusCode == 200) {
-          const { idDireccion, idCliente } = req.params
-          const { direccion } = req.body
+          const { idDireccion } = req.params
+          const direccion = req.body
+          console.log(direccion)
           
-          var query = ""    
+          var query = "UPDATE direccion " + 
+          "SET calle = ?, noExterior = ?, noInterior= ?,colonia = ?,codigoPostal = ?,municipio = ?," + 
+          "entidadFederativa = ?, latitud = ? , longitud = ? WHERE idDireccion = ?;"    
           
           mysqlConnection.query(
-            query,
+            query,[direccion.calle, direccion.noExterior, direccion.noInterior, direccion.colonia,
+              direccion.codigoPostal, direccion.municipio, direccion.entidadFederativa, direccion.latitud,
+              direccion.longitud, idDireccion],
             (error, resultadoInicio) => {
               if (error) {
                 httpResponse(res, error = {"code" : 500, "detailsError" : error})
@@ -176,15 +224,14 @@ const modificarDireccion = (req, res) => {
                 httpResponse(res, error = {"code" : 404, "detailsError" : ""})
                 
               }else {
-      
-                var usuariosConsultados = resultadoInicio;
-      
-                res.status(200).json(mensajes.accionExitosa,usuariosConsultados);
+                               
+                      res.status(204).json();
                 
               }
             }
           );
   
+
         }else if (respuesta.statusCode == 401) {
           res.status(401);
           httpResponse(res, error = {"code" : 401, "detailsError" : ""})
