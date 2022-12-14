@@ -1,17 +1,22 @@
 const express = require('express')
 const router = express.Router()
-const {agregarProductoCarrito, crearPedido, consultarProductos} = require('../controllers/carritos')
+const {agregarProductoCarrito, modificarProductoCarrito,
+     crearPedido, consultarProductos} = require('../controllers/carritos')
 
-// ? POST request
+// ? GET request
 // ! http://localhost:3001/api/abarrotes_cuevas/1.0/carritos/
-router.get('/', consultarProductos)
+router.get('/:idUsuario', consultarProductos)
 
 // ? POST request 
-// ! http://localhost:3001/api/abarrotes_cuevas/1.0/carritos/:idUsuario/:codigoBarras
-router.post('/:idUsuario/:codigoBarras', agregarProductoCarrito)
+// ! http://localhost:3001/api/abarrotes_cuevas/1.0/carritos/:idUsuario/:idInventario
+router.post('/:idUsuario/:idInventario', agregarProductoCarrito)
+
+// ? PATCH   request 
+// ! http://localhost:3001/api/abarrotes_cuevas/1.0/carritos/:idUsuario/:idInventario
+router.patch('/:idUsuario/:idInventario', modificarProductoCarrito)
 
 // ? POST request
-// ! http://localhost:3001/api/abarrotes_cuevas/1.0/carritos/:idUsuario/pedido
-router.post('/:idUsuario/pedido', crearPedido)
+// ! http://localhost:3001/api/abarrotes_cuevas/1.0/carritos/:idUsuario
+router.post('/:idUsuario', crearPedido)
 
 module.exports = router;

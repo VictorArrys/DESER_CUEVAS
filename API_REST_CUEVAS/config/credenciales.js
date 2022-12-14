@@ -13,7 +13,7 @@ module.exports.SERVER_CREDENTTIALS = {
 
 module.exports.LOCAL_CREDENTTIALS = {
     host : 'localhost',
-    database : 'dbcuevas',
+    database : 'bdcuevas',
     user : 'root',
     password: "usagitsukino",
     port: 3306

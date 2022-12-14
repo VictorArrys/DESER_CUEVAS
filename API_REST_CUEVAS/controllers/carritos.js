@@ -12,10 +12,10 @@ const consultarProductos = (req, res) => {
       if (respuesta.statusCode == 200) {
         const { idUsuario } = req.params
         
-        var query = ""    
+        var query = "SELECT * FROM productoscarrito WHERE idUsuario = ?;"    
         
         mysqlConnection.query(
-          query,
+          query,[idUsuario],
           (error, resultadoInicio) => {
             if (error) {
               httpResponse(res, error = {"code" : 500, "detailsError" : error})
@@ -28,9 +28,12 @@ const consultarProductos = (req, res) => {
               
             }else {
     
-              var usuariosConsultados = resultadoInicio;
+              var productosCarrito =  {
+                mensaje: mensajes.accionExitosa,
+                productos : resultadoInicio
+              };
     
-              res.status(200).json(mensajes.accionExitosa,usuariosConsultados);
+              res.status(200).json(productosCarrito);
               
             }
           }
@@ -59,13 +62,14 @@ const agregarProductoCarrito = (req, res) => {
         var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente");
   
         if (respuesta.statusCode == 200) {
-          const { idUsuario } = req.params
-          const { producto } = req.body
+          const { idUsuario, idInventario } = req.params
+          const producto  = req.body
           
-          var query = ""    
+          var query = "INSERT INTO productodecarrito(idusuario,idInventario,precio,cantidadProducto)"+
+          "VALUES(?,?,?,?);"    
           
           mysqlConnection.query(
-            query,
+            query,[idUsuario, idInventario, producto.precio,producto.cantidad],
             (error, resultadoInicio) => {
               if (error) {
                 httpResponse(res, error = {"code" : 500, "detailsError" : error})
@@ -78,9 +82,12 @@ const agregarProductoCarrito = (req, res) => {
                 
               }else {
       
-                var usuariosConsultados = resultadoInicio;
+                var productoCarrito =  {
+                  mensaje: mensajes.accionExitosa,
+                  'insertado': resultadoInicio['affectedRows']
+                };
       
-                res.status(200).json(mensajes.accionExitosa,usuariosConsultados);
+                res.status(201).json(productoCarrito);
                 
               }
             }
@@ -100,50 +107,116 @@ const agregarProductoCarrito = (req, res) => {
           httpResponse(res, error = {"code" : 500, "detailsError" : exception.message})
   
       }
+}
+
+const modificarProductoCarrito = (req, res) => {    
+  try{
+      const token = req.headers["x-access-token"];
+      var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente");
+
+      if (respuesta.statusCode == 200) {
+        const { idUsuario, idInventario } = req.params
+        const producto  = req.body
+        
+        var query = "UPDATE productodecarrito SET precio = ?, "+
+        "cantidadProducto = ? WHERE idusuario = ? AND idInventario = ?"
+        
+        mysqlConnection.query(
+          query,[producto.precio,producto.cantidad, idUsuario, idInventario],
+          (error, resultadoInicio) => {
+            if (error) {
+              httpResponse(res, error = {"code" : 500, "detailsError" : error})
+              
+            }else if (resultadoInicio.length == 0) {
+              console.log(
+                "¡Sin registros!"
+              );
+              httpResponse(res, error = {"code" : 404, "detailsError" : ""})
+              
+            }else {
+        
+              res.status(204).json();
+              
+            }
+          }
+        );
+
+      }else if (respuesta.statusCode == 401) {
+        res.status(401);
+        httpResponse(res, error = {"code" : 401, "detailsError" : ""})
+        
+      } else {
+
+        httpResponse(res, error = {"code" : 500, "detailsError" : "Hubo un problema al validar el token"})
+
+      }   
+
+    }catch(exception){       
+        httpResponse(res, error = {"code" : 500, "detailsError" : exception.message})
+
+    }
 }
     
 const crearPedido = (req, res) => {
     
     try{
         const token = req.headers["x-access-token"];
-        var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Administrador");
+        var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente");
   
         if (respuesta.statusCode == 200) {
           const { idUsuario } = req.params
-          /* 
-            ? pedido {
-                folio,
-                metodoPago,
-                productos{
+          const productosPedido = req.body
 
-                }
-            } 
-          */
-          const { pedido } = req.body
-          
-          var query = ""    
-          
+          var queryPedido = "INSERT INTO pedido(metodoPago, estatus, fechaHora, idUsuario, " + 
+          "idDireccion,costoPedido) VALUES (?,?,?,?,?,?);"
+          var query = "CALL crearPedido(?,?,?,?)"           
+        
           mysqlConnection.query(
-            query,
-            (error, resultadoInicio) => {
-              if (error) {
-                httpResponse(res, error = {"code" : 500, "detailsError" : error})
+            queryPedido,[productosPedido.metodoPagoP, productosPedido.estatusP, productosPedido.fechaHoraP,
+              idUsuario, productosPedido.idDireccionP ,productosPedido.costoPedidoP],
+             (error, resultadoInicio) => {
+               if (error) {
+                 httpResponse(res, error = {"code" : 500, "detailsError" : error})
+                 
+               }else if (resultadoInicio.length == 0) {
+                 console.log(
+                   "¡Sin registros!"
+                 );
+                 httpResponse(res, error = {"code" : 404, "detailsError" : ""})
+                 
+               } else{
+                  var folio = resultadoInicio['insertId']
+                  var productos = productosPedido.productos
+
+                  for(var i = 0; i < productos.length; i++){
+
+                    const productoDePedido = productos[i];
+                    mysqlConnection.query(
+                      query,[folio,productoDePedido.codigoBarrasP, productoDePedido.idInventarioP, productoDePedido.cantidadPedidoP],
+                      (error, resultadoInicio) => {
+                        if (error) {
+                          httpResponse(res, error = {"code" : 500, "detailsError" : error})
+                          
+                        }else if (resultadoInicio.length == 0) {
+                          console.log(
+                            "¡Sin registros!"
+                          );
+                          httpResponse(res, error = {"code" : 404, "detailsError" : ""})
+                          
+                        }
+                      }
+                    );
+                  }
+                  var pedidoCreado =  {
+                    mensaje: mensajes.accionExitosa,
+                    'insertado': resultadoInicio['affectedRows']
+                  };            
+                  res.status(201).json(pedidoCreado);
                 
-              }else if (resultadoInicio.length == 0) {
-                console.log(
-                  "¡Sin registros!"
-                );
-                httpResponse(res, error = {"code" : 404, "detailsError" : ""})
-                
-              }else {
-      
-                var usuariosConsultados = resultadoInicio;
-      
-                res.status(200).json(mensajes.accionExitosa,usuariosConsultados);
-                
-              }
-            }
-          );
+               }
+             }
+           );
+        
   
         }else if (respuesta.statusCode == 401) {
           res.status(401);
@@ -162,4 +235,4 @@ const crearPedido = (req, res) => {
 
 }
 
-module.exports = {agregarProductoCarrito, crearPedido, consultarProductos}
+module.exports = {agregarProductoCarrito, crearPedido, modificarProductoCarrito, consultarProductos}
