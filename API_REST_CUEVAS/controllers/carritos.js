@@ -24,6 +24,7 @@ const consultarProductos = (req, res) => {
               console.log(
                 "¡Sin registros!"
               );
+              //Si no hay registros podemos usar un 200 porque podría parecer que esta mal
               httpResponse(res, error = {"code" : 404, "detailsError" : ""})
               
             }else {

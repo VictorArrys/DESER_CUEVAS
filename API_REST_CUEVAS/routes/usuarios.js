@@ -4,9 +4,9 @@ const { validarInicioSesion } = require('../utils/validators/validacion_usuario'
 
 const {consultarUsuarios, modificarUsuario, iniciarSesion} = require('../controllers/usuarios')
 
-// ? GET request
-// ! RUTA -> http://localhost:3001/api/abarrotes_cuevas/1.0/usuarios/iniciarSesion/:correo/:clave
-router.get("/iniciarSesion/:correo/:clave", validarInicioSesion, iniciarSesion)
+// ? POST request
+// ! RUTA -> http://localhost:3001/api/abarrotes_cuevas/1.0/usuarios/iniciarSesion/
+router.post("/iniciarSesion", validarInicioSesion, iniciarSesion)
 
 // ? GET request
 // ! RUTA -> http://localhost:3001/api/abarrotes_cuevas/1.0/usuarios

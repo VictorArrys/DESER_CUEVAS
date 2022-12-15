@@ -7,7 +7,8 @@ var LlaveToken = {
 exports.CrearToken = function (payload) {
   var llave = LlaveToken.key;
   const token = jwt.sign(payload, llave, {
-    expiresIn: 60 * 60 * 24,
+    // Maximo 2 horas para cerrar sesión y mantener protección
+    expiresIn: 60 * 60 * 2,
   });
   return token;
 };

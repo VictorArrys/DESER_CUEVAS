@@ -2,13 +2,17 @@ const {httpResponse} = require('../utils/handleError')
 const mensajes = require("../utils/mensajes");
 var mysqlConnection = require("../config/conexion");
 const GestionToken = require("../config/generateToken");
+const bcrypt = require("bcryptjs");
 
 const iniciarSesion =  (req, res) => {
-    const { correo, clave } = req.params;
+  
+    const credenciales = req.body;
     var query = "SELECT correo, clave, tipo, nombre FROM usuario WHERE correo = ? AND clave = ?";
-
+    console.log(credenciales);
+    // Entre más rondas, mejor protección, pero más consumo de recursos. 10 está bien
+    const rondasDeSal = 10;
     mysqlConnection.query(
-      query,[correo, clave],
+      query,[credenciales.correo, credenciales.clave],
       (error, resultadoInicio) => {
         if (error) {
           httpResponse(res, error = {"code" : 500, "detailsError" : error})
@@ -44,16 +48,19 @@ const iniciarSesion =  (req, res) => {
           var token = GestionToken.CrearToken(payloadToken);        
 
           console.log("¡Inicio sesión el usuario: " + mensajes.accionExitosa + usuario.nombre);
-
+          const sesion = {
+            mensaje : mensajes.registroExitoso,
+            token: token
+          }
           res.setHeader("x-access-token", token);
-          res.status(200).json(usuario);
+          res.status(201).json(sesion);
           
         }
       }
     );
 
-
 }
+
 const consultarUsuarios = (req, res) => {
     try{
       const token = req.headers["x-access-token"];

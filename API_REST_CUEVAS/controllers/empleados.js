@@ -2,6 +2,7 @@ const {httpResponse} = require('../utils/handleError')
 const mensajes = require("../utils/mensajes");
 var mysqlConnection = require("../config/conexion");
 const GestionToken = require("../config/generateToken");
+const bcrypt = require("bcryptjs");
 
 const getEmpleados = (req, res) => {
     try{
@@ -113,22 +114,27 @@ const registrarEmpleado = (req, res) => {
             console.log(empleado)
             var query = "CALL registrarEmpleado(?,?,?,?,?,?,?,?,?);"
 
-            mysqlConnection.query(query, [empleado.nombre, empleado.primerApellido, empleado.segundoApellido,
-            empleado.correo, empleado.clave, 2, empleado.fechaIngreso, empleado.idCargo, empleado.idSucursal], (error, resultadoRegistro) =>{
-                if (error){
-                    httpResponse(res, error = {"code" : 500, "detailsError" : error})
-                }else{
-                    console.log(resultadoRegistro)
-                    var empleadoCreado
-                    
-                    empleadoCreado = {
-                        mensaje: mensajes.accionExitosa,
-                        'insertado' : resultadoRegistro['affectedRows']
-                    }
+            const rondasDeSal = 10;
+           
 
-                    res.status(201).json(empleadoCreado);
-                }
-            })
+            mysqlConnection.query(query, [empleado.nombre, empleado.primerApellido, empleado.segundoApellido,
+              empleado.correo, empleado.clave, 2, empleado.fechaIngreso, empleado.idCargo, empleado.idSucursal], (error, resultadoRegistro) =>{
+                  if (error){
+                      httpResponse(res, error = {"code" : 500, "detailsError" : error})
+                  }else{
+                      console.log(resultadoRegistro)
+                      var empleadoCreado
+                      
+                      empleadoCreado = {
+                          mensaje: mensajes.accionExitosa,
+                          'insertado' : resultadoRegistro['affectedRows']
+                      }
+  
+                      res.status(201).json(empleadoCreado);
+                  }
+              });
+
+            
 
         }else if (respuesta.statusCode == 401){
             res.status(401);

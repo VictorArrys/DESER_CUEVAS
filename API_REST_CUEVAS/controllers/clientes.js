@@ -2,7 +2,7 @@ const {httpResponse} = require('../utils/handleError')
 const mensajes = require("../utils/mensajes");
 var mysqlConnection = require("../config/conexion");
 const GestionToken = require("../config/generateToken");
-
+const bcrypt = require("bcryptjs");
 
 const getClientes = (req, res) => {
   try{
@@ -108,9 +108,11 @@ const registrarCliente = (req, res) => {
       console.log(cliente)
       var query = 'CALL registrarCliente(?,?,?,?,?,?,?,?);'
 
-
-      mysqlConnection.query(query, [cliente.nombre, cliente.primerApellido, cliente.segundoApellido, cliente.correo,
-      cliente.clave,3, cliente.noCelular, cliente.fechaNacimiento], (error, resultadoRegistro) =>{
+      const rondasDeSal = 10;
+      mysqlConnection.query(query, [cliente.nombre, cliente.primerApellido, 
+        cliente.segundoApellido, cliente.correo,
+      cliente.clave,3, cliente.noCelular, cliente.fechaNacimiento], 
+      (error, resultadoRegistro) =>{
         if (error){
           httpResponse(res, error = {"code" : 500, "detailsError" : error})
         }else{
@@ -123,7 +125,10 @@ const registrarCliente = (req, res) => {
 
           res.status(201).json(clienteCreado);
         }
-      })
+      });
+      
+
+      
     }catch(exception){
       httpResponse(res, error = {"code" : 500, "detailsError" : exception.message})
 

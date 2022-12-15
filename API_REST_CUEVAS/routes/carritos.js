@@ -6,7 +6,7 @@ const {agregarProductoCarrito, modificarProductoCarrito,
      crearPedido, consultarProductos} = require('../controllers/carritos')
 
 // ? GET request
-// ! http://localhost:3001/api/abarrotes_cuevas/1.0/carritos/
+// ! http://localhost:3001/api/abarrotes_cuevas/1.0/carritos/:idUsuario
 router.get('/:idUsuario', validacionIdUsuario, consultarProductos)
 
 // ? POST request 
