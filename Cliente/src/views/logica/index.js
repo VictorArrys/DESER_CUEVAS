@@ -1,7 +1,6 @@
-var URL_HOST = "https://9f0f-2806-2f0-7080-c9c8-c1b4-9c34-e39b-24ff.ngrok.io/"
-//  var URL_HOST = "http://localhost:4000/"
+var URL_HOST = "http://localhost:3000/api/abarrotes_cuevas/1.0/"
 
-function iniciarSesion(params) {
+function iniciarSesion() {
     
     let formularioIniciarSesion = document.forms.formularioIniciarSesion;
     
@@ -12,24 +11,27 @@ function iniciarSesion(params) {
     
     var request = new XMLHttpRequest();
 
-    request.open('GET', URL_HOST+"usuario/iniciarSesion/" + correo+ "/" + contrasenia, true);
+    request.open('GET', URL_HOST+"usuarios/iniciarsesion/" + correo+ "/" + contrasenia, true);
 
     request.onload = function(){
-        if (request.status >= 200 && request.status < 300) {
+        if (request.status >= 200 && request.status < 300) {;
+
             informacionUsuario = JSON.parse(this.response);
 
             if (informacionUsuario.length === 0) {
+
                 let mostrarMensaje = document.getElementById("mensajeAlerta");
+
                 mostrarMensaje.innerHTML =  '<div class="alert alert-danger text-center " role="alert">' +
                                                 'No se encontro el usuario con las credeciales introducidas' +
                                             '</div>';                      
             }else{
 
-                switch (informacionUsuario[0].tipo) {
-                    case "Cliente":
+                switch (informacionUsuario.tipo) {
+                    case 3:
                         localStorage.setItem('idUsuario',informacionUsuario[0].idUsuario);
                         localStorage.setItem(informacionUsuario[0].idUsuario, JSON.stringify(informacionUsuario[0]));
-                        window.open('./vista_consumidor/productos.html?idUsuario='+ informacionUsuario[0].idUsuario ,'_self');
+                        window.open('./vista_consumidor/productos.html?idUsuario='+ informacionUsuario.clave ,'_self');
                         break;
                     case "Ejecutivo":
                         
