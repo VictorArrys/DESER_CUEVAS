@@ -19,6 +19,7 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "mysql": "^2.18.1",
+    "nodaemon": "^0.0.5",
     "rest-mssql-nodejs": "^1.0.10",
     "validator": "^13.7.0"
   },

@@ -10,7 +10,8 @@ npm install --save express validator
 npm i --save multer 
 npm i jsonwebtoken   
 npm i mysql
-npm i nodemon        
+npm i nodemon
+npm i cors        
 
 # Organización de la API
 #controllers cuenta con las funciones que tienen la funcionalidad
