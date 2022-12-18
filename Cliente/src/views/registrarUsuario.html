@@ -1,57 +1,60 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
+
+<head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Usuario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link href="css/estilo.css" rel="stylesheet">
     <script type="text/javascript" src="midleware/registrarUsuario.js"></script>
-  </head>
-  <body>
-      <div class="container my-5 py-3 col-md-5 shadow p-3 mb-5 bg-body rounde rounded border border-4" style="background-color: white;">
-          <h1 class="titulo">Nuevo registro</h1>
-          <form onsubmit="return registrar(event)">
+</head>
+
+<body id="formulario">
+    <div class="container my-5 py-3 col-md-5 shadow p-3 mb-5 bg-body rounde rounded border border-4" style="background-color: white;">
+        <h1 class="titulo">Nuevo registro</h1>
+        <form onsubmit="return registrar(event)">
             <div class="mb-3 mt-4">
-              <label for="txt_nombre" class="lb_nombre">Nombre*: </label>
-              <input type="text" class="form-control" id="txt_nombre" placeholder="Ingrese su nombre(s)" required>
+                <label for="txt_nombre" class="lb_nombre">Nombre*: </label>
+                <input type="text" class="form-control" id="txt_nombre" placeholder="Ingrese su nombre(s)" required>
             </div>
             <div class="mb-3 mt-4">
-              <label for="txt_aPaterno" class="lb_aPaterno">Apellido Paterno*: </label>
-              <input type="text" class="form-control" id="txt_aPaterno" placeholder="Ingrese su apellido paterno" required>
+                <label for="txt_aPaterno" class="lb_aPaterno">Apellido Paterno*: </label>
+                <input type="text" class="form-control" id="txt_aPaterno" placeholder="Ingrese su apellido paterno" required>
             </div>
             <div class="mb-3 mt-4">
-              <label for="txt_aMaterno" class="lb_aMaterno">Apellido Materno: </label>
-              <input type="text" class="form-control" id="txt_aMaterno" placeholder="Ingrese su apellido materno">
+                <label for="txt_aMaterno" class="lb_aMaterno">Apellido Materno: </label>
+                <input type="text" class="form-control" id="txt_aMaterno" placeholder="Ingrese su apellido materno">
             </div>
             <div class="mb-3 mt-4">
-              <label for="txt_fNacimiento" class="lb_fNacimiento">Fecha Nacimiento*: </label>
-              <input type="date" class="form-control" id="txt_fNacimiento" placeholder="Ingrese su fecha de nacimiento" required>
+                <label for="txt_fNacimiento" class="lb_fNacimiento">Fecha Nacimiento*: </label>
+                <input type="date" class="form-control" id="txt_fNacimiento" placeholder="Ingrese su fecha de nacimiento" required>
             </div>
             <div class="mb-3 mt-4">
-              <label for="txt_correo" class="lb_correo">Correo electrónico*: </label>
-              <input type="text" class="form-control" id="txt_correo" placeholder="Ingrese su su correo electrónico" required>
+                <label for="txt_correo" class="lb_correo">Correo electrónico*: </label>
+                <input type="text" class="form-control" id="txt_correo" placeholder="Ingrese su su correo electrónico" required>
             </div>
             <div class="mb-3 mt-4">
-              <label for="txt_celular" class="lb_celular">Celular*: </label>
-              <input type="text" class="form-control" id="txt_celular" placeholder="Ingrese su número de celular" required>
+                <label for="txt_celular" class="lb_celular">Celular*: </label>
+                <input type="text" class="form-control" id="txt_celular" placeholder="Ingrese su número de celular" required>
             </div>
             <div class="mb-3 mt-4">
-              <label for="txt_clave" class="lb_clave">Clave*: </label>
-              <input type="text" class="form-control" id="txt_clave" placeholder="Ingrese una contraseña" required>
+                <label for="txt_clave" class="lb_clave">Clave*: </label>
+                <input type="text" class="form-control" id="txt_clave" placeholder="Ingrese una contraseña" required>
             </div>
             <label for="floatingInputGrid" style="color: red;">*Campos obligatorios</label>
             <br>
             <div class="d-grid gap-2">
-              <input type="submit"  value="Registrarse"class="btn btn-primary"/>
-              <button class="btn btn-secondary" onclick="cancelar()">Cancelar</button>
+                <input type="submit" value="Registrarse" class="btn btn-primary" />
+                <button class="btn btn-secondary" onclick="cancelar()">Cancelar</button>
             </div>
             <div class="text-center mt-4">
-              <span>Ya tengo una cuenta <a href="index.html">Iniciar Sesión</a></span>
-              <br>
+                <span>Ya tengo una cuenta <a href="index.html">Iniciar Sesión</a></span>
+                <br>
             </div>
-          </form>
-      </div>     
-  </body>
-  </html>
+        </form>
+    </div>
+</body>
+
+</html>

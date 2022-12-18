@@ -16,14 +16,12 @@ function validarUsuario() {
         let idUsuario = valorUser.split('=')[1];
 
         usuario = JSON.parse(localStorage.getItem(idUsuario));
-        console.log(usuario)
-        console.log(usuario.nombre)
 
         if (!usuario) {
             window.open('../index.html', '_self');
         } else if (usuario.tipo === "Cliente") {
             let mostrarMensaje = document.getElementById("nombreCompleto");
-            mostrarMensaje.innerHTML = "Ejemplo nomas";
+            mostrarMensaje.innerHTML = usuario.nombre;
 
             var urlCarritoCompras = document.getElementById("carritoCompras");
             urlCarritoCompras.href = "carritoCompras.html?idUsuario=" + usuario.idUsuario;

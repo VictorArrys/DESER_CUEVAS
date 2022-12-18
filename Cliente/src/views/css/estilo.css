@@ -1,14 +1,31 @@
-body{
-    background: -webkit-linear-gradient(to right, #191654, #43C6AC);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, purple, #43C6AC); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+#formulario {
+    background: -webkit-linear-gradient(to right, #191654, #43C6AC);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, purple, #43C6AC);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
-.titulo{
+body {
+    background: #E0DFED;
+}
+
+.titulo {
     text-align: center;
 }
 
-.btn{
+.btn {
     font-weight: bold;
 }
 
+#menu {
+    position: relative;
+    padding: 5px;
+    display: flex;
+    box-shadow: 0 2px 12px 0 rgba(90, 40, 191, 0.5);
+    background: linear-gradient(135deg, #4D1E64, #637dfb)
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
 
+#menu a {
+    color: white;
+}
