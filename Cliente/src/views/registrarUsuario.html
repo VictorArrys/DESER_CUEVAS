@@ -7,36 +7,50 @@
     <title>Registrar Usuario</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link href="css/estilo.css" rel="stylesheet">
-    <script type="text/javascript" src="logica/registrarUsuario.js"></script>
-</head>
+    <script type="text/javascript" src="midleware/registrarUsuario.js"></script>
+  </head>
   <body>
       <div class="container my-5 py-3 col-md-5 shadow p-3 mb-5 bg-body rounde rounded border border-4" style="background-color: white;">
-          <h1 class="titulo">Registro</h1>
+          <h1 class="titulo">Nuevo registro</h1>
           <form onsubmit="return registrar(event)">
             <div class="mb-3 mt-4">
-                <label for="txt_nombre" class="lb_nombre">Nombre completo: </label>
-                <input type="text" class="form-control" id="txt_nombre" placeholder="Ingrese su nombre completo" required>
-              </div>
-              <div class="mb-3">
-                <label for="txt_telefono" class="lb_telefono">Número de teléfono: </label>
-                <input type="number" class="form-control" id="txt_telefono" placeholder="2282393962" required></input>
-              </div>
-              <div class="mb-3">
-                <label for="txt_correo" class="lb_correo">Dirección de correo:</label>
-                <input type="email" class="form-control" id="txt_correo" placeholder="example@gmail.com" required></input>
-              </div>
-              <div class="mb-3">
-                <label for="txt_contraseña" class="lb_contraseña">Contraseña: </label>
-                <input type="password" class="form-control" id="txt_contraseña" required></input>
-              </div>
-              <div class="d-grid gap-2">
-                <input type="submit"  value="Registrar"class="btn btn-success mt-2" />
-                <button class="btn btn-secondary" onclick="cancelar()">Cancelar</button>
-              </div>
-              <div class="text-center mt-4">
-                      <span>Ya tengo cuenta <a href="index.html">Iniciar Sesión</a></span>
-                      <br>
-                    </div>
+              <label for="txt_nombre" class="lb_nombre">Nombre*: </label>
+              <input type="text" class="form-control" id="txt_nombre" placeholder="Ingrese su nombre(s)" required>
+            </div>
+            <div class="mb-3 mt-4">
+              <label for="txt_aPaterno" class="lb_aPaterno">Apellido Paterno*: </label>
+              <input type="text" class="form-control" id="txt_aPaterno" placeholder="Ingrese su apellido paterno" required>
+            </div>
+            <div class="mb-3 mt-4">
+              <label for="txt_aMaterno" class="lb_aMaterno">Apellido Materno: </label>
+              <input type="text" class="form-control" id="txt_aMaterno" placeholder="Ingrese su apellido materno">
+            </div>
+            <div class="mb-3 mt-4">
+              <label for="txt_fNacimiento" class="lb_fNacimiento">Fecha Nacimiento*: </label>
+              <input type="date" class="form-control" id="txt_fNacimiento" placeholder="Ingrese su fecha de nacimiento" required>
+            </div>
+            <div class="mb-3 mt-4">
+              <label for="txt_correo" class="lb_correo">Correo electrónico*: </label>
+              <input type="text" class="form-control" id="txt_correo" placeholder="Ingrese su su correo electrónico" required>
+            </div>
+            <div class="mb-3 mt-4">
+              <label for="txt_celular" class="lb_celular">Celular*: </label>
+              <input type="text" class="form-control" id="txt_celular" placeholder="Ingrese su número de celular" required>
+            </div>
+            <div class="mb-3 mt-4">
+              <label for="txt_clave" class="lb_clave">Clave*: </label>
+              <input type="text" class="form-control" id="txt_clave" placeholder="Ingrese una contraseña" required>
+            </div>
+            <label for="floatingInputGrid" style="color: red;">*Campos obligatorios</label>
+            <br>
+            <div class="d-grid gap-2">
+              <input type="submit"  value="Registrarse"class="btn btn-primary"/>
+              <button class="btn btn-secondary" onclick="cancelar()">Cancelar</button>
+            </div>
+            <div class="text-center mt-4">
+              <span>Ya tengo una cuenta <a href="index.html">Iniciar Sesión</a></span>
+              <br>
+            </div>
           </form>
       </div>     
   </body>
