@@ -1,12 +1,12 @@
 const { check } = require('express-validator')
-const {validateResults} = require('../handleValidator')
+const { validateResults } = require('../handleValidator')
 
 const validarRegistrarProducto = [ // agregar al procedimiento almacenado si existe el registro
-    
+
     check('codigoBarras')
     .exists()
     .notEmpty()
-    .isLength({min:16, max:16}),
+    .isLength({ min: 16, max: 16 }),
     check('descripcion')
     .exists()
     .notEmpty(),
@@ -35,11 +35,11 @@ const validarRegistrarProducto = [ // agregar al procedimiento almacenado si exi
 
 
 const validarModificarProducto = [ // agregar al procedimiento almacenado si existe el registro
-    
+
     check('idProducto')
     .exists()
     .notEmpty()
-    .isLength({min:16, max:16}),
+    .isLength({ min: 16, max: 16 }),
     check('descripcion')
     .exists()
     .notEmpty(),
@@ -73,7 +73,7 @@ const validarAgregarProducto = [ // agregar al procedimiento almacenado si exist
     check('idProducto')
     .exists()
     .notEmpty()
-    .isLength({min:16, max:16}),
+    .isLength({ min: 16, max: 16 }),
     check('cantidad')
     .exists()
     .notEmpty()
@@ -88,7 +88,7 @@ const validarAgregarProducto = [ // agregar al procedimiento almacenado si exist
 ];
 
 const validarConsultaCatalogo = [ // agregar al procedimiento almacenado si existe el registro
-    
+
     check('idSucursal')
     .exists()
     .notEmpty()
@@ -98,4 +98,4 @@ const validarConsultaCatalogo = [ // agregar al procedimiento almacenado si exis
     }
 ];
 
-module.exports = { validarRegistrarProducto,validarModificarProducto, validarAgregarProducto, validarConsultaCatalogo }
+module.exports = { validarRegistrarProducto, validarModificarProducto, validarAgregarProducto, validarConsultaCatalogo }

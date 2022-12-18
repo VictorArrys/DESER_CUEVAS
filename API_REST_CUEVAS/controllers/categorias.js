@@ -7,6 +7,7 @@ const consultarCategorias = (req, res) => {
 
     try {
         const token = req.headers["x-access-token"];
+        console.log("El token")
         console.log(token)
         var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente");
 

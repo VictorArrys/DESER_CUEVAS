@@ -1,5 +1,4 @@
 var URL_HOST = "http://localhost:3001/api/abarrotes_cuevas/1.0"
-    // var URL_HOST = "http://localhost:4000/"
 
 var usuario;
 var tokenCliente;
@@ -16,10 +15,9 @@ function validarUsuario() {
 
         let idUsuario = valorUser.split('=')[1];
 
-        usuario = localStorage.getItem(idUsuario);
-        tokenCliente = localStorage.getItem(usuario.token);
+        usuario = JSON.parse(localStorage.getItem(idUsuario));
         console.log(usuario)
-        console.log(usuario.token)
+        console.log(usuario.nombre)
 
         if (!usuario) {
             window.open('../index.html', '_self');
@@ -48,36 +46,63 @@ function cerrarSesion() {
 }
 
 function cargarProductos() {
+
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var data = JSON.parse(this.response);
-            listaProductos = data;
-            mostrarProductos(data);
+            listaProductos = data.resultado;
+            mostrarProductos(listaProductos);
         }
     };
-    // xhttp.open("GET", URLHost+"productos", true);
-    xhttp.open("GET", URL_HOST + "/categorias", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
 
-    //xhttp.setRequestHeader("x-access-token", JSON.stringify({ token }));
+    const idSucursal = 1
+
+    xhttp.open("GET", URL_HOST + "/productos/sucursal/" + 1, true);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.setRequestHeader("x-access-token", usuario.token);
+
     xhttp.send();
+
 }
+
+function toBase64(arr) {
+    //arr = new Uint8Array(arr) if it's an ArrayBuffer
+    return btoa(
+        arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
+    );
+}
+
+function bin2string(array) {
+    var result = "";
+    for (var i = 0; i < array.length; ++i) {
+        result += (String.fromCharCode(array[i]));
+    }
+    return result;
+}
+
+
 
 function mostrarProductos(data) {
 
     for (var i = 0; i < data.length; i++) {
+
+        var producto = data[0]
+        var imagen = data[0].archivo
+        var Imagen_Bin_String = bin2string(imagen);
+        var Imagen_Base64 = btoa(Imagen_Bin_String);
+
         var card = `<div class="col">
                         <div class="card" style="min-height: 300px;">
                             <div class="text-center">
-                                <img src="${URL_HOST}imagenesProductos/${data[i].ruta == null? "sinImagen.svg":data[i].ruta}" class="card-img-top " style="width:140px; margin-top: 10px; border-radius: 20px;" alt="imgProducto"></img>
+                                <img src="data:image/jpg;base64,' + ${Imagen_Base64} + '" class="card-img-top " style="width:140px; margin-top: 10px; border-radius: 20px;" alt="imgProducto"></img>
                             </div>
                             <div class="card-body">
-                                <h6 class="fw-bold">${data[i].nombre}</h6>
-                                <h6> Precio: $${data[i].precio}</h6>
+                                <h6 class="fw-bold">${producto.nombreProducto}</h6>
+                                <h6> Precio: $${producto.precioVenta}</h6>
                             </div>
                             <div class="d-grid gap-2 mb-1 mx-1">
-                                <button class="btn btn-primary btn-sm" onclick="verProducto(${data[i].idProducto})">Ver producto</button>
+                                <button class="btn btn-primary btn-sm" onclick="verProducto(${producto.codigoBarras})">Ver producto</button>
                             </div>
                         </div>
                     </div`
@@ -91,14 +116,13 @@ function cargarCategorias() {
         if (this.readyState == 4 && this.status == 200) {
             var data = JSON.parse(this.response);
             console.log(data)
-            mostrarCategorias(data);
+            mostrarCategorias(data.resultadoInicio);
         }
     };
-    // xhttp.open("GET", URLHost+"obtenerCategorias", true);
-    //xhttp.open("GET", "http://localhost:4000/categorias/obtenerCategorias", true);
+
     xhttp.open("GET", URL_HOST + "/categorias/", true);
     xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.setRequestHeader("x-access-token", tokenCliente);
+    xhttp.setRequestHeader("x-access-token", usuario.token);
 
     xhttp.send();
 }
@@ -114,6 +138,8 @@ function mostrarCategorias(data) {
     }
 
 }
+
+
 
 function verProducto(idProducto) {
     //Brandon para acceder al ID del usuario nada más con el localStorage accedes.
@@ -131,7 +157,7 @@ function mostrarProductoCategoria(idCategoria) {
     } else {
         contenedorProductos.innerHTML = "";
 
-        listaProductosFiltrados = listaProductosFiltrados.filter(producto => producto.idCategoria == idCategoria)
+        listaProductosFiltrados = listaProductosFiltrados.filter(producto => producto.idCatagoria == idCategoria)
 
         mostrarProductos(listaProductosFiltrados);
     }
