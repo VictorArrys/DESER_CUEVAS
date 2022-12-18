@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 const iniciarSesion = (req, res) => {
 
     const { correo, clave } = req.body;
-    var query = "SELECT correo, clave, tipo, nombre FROM usuario WHERE correo = ? AND clave = ?";
+    var query = "SELECT idUsuario, correo, tipo, nombre, primerApellido, segundoApellido FROM usuario WHERE correo = ? AND clave = ?";
     console.log("Body")
     console.log(req.body);
 
@@ -43,16 +43,25 @@ const iniciarSesion = (req, res) => {
                 }
 
                 const payloadToken = {
+                    idUsuario: usuario.idUsuario,
                     correo: usuario.correo,
                     tipo: tipoUsuario
                 };
+
                 var token = GestionToken.CrearToken(payloadToken);
+
+                const infoUsuario = {
+                    idUsuario: usuario.idUsuario,
+                    nombre: usuario.nombre + ' ' + usuario.primerApellido + ' ' + usuario.segundoApellido,
+                    correo: usuario.correo,
+                    tipo: tipoUsuario,
+                    token: token
+                }
 
                 console.log("¡Inicio sesión el usuario: " + mensajes.accionExitosa + usuario.nombre);
                 const sesion = {
                     mensaje: mensajes.registroExitoso,
-                    usuario: payloadToken,
-                    token: token
+                    usuario: infoUsuario
                 }
                 res.setHeader("x-access-token", token);
                 res.status(201).json(sesion);

@@ -1,5 +1,4 @@
 var URL_HOST = "http://localhost:3001/api/abarrotes_cuevas/1.0"
-    //  var URL_HOST = "http://localhost:4000/"
 
 function iniciarSesion() {
 
@@ -30,18 +29,21 @@ function iniciarSesion() {
             } else {
 
                 console.log(informacionUsuario);
+                let sesion = informacionUsuario.usuario
 
-                switch (informacionUsuario.usuario.tipo) {
+                switch (sesion.tipo) {
                     case "Cliente":
-                        localStorage.setItem('token', informacionUsuario.token);
-                        window.open('./vista_consumidor/productos.html');
+                        localStorage.setItem('idUsuario', sesion.idUsuario);
+                        localStorage.setItem(sesion.idUsuario, JSON.stringify(sesion));
+                        window.open('./vista_consumidor/productos.html?idUsuario=' + sesion.idUsuario, '_self');
                         break;
                     case "Repartidor":
 
                         break;
                     case "Administrador":
-                        localStorage.setItem('token', informacionUsuario.token);
-                        window.open('productos.html?correo=' + informacionUsuario[0].correo, '_self');
+                        localStorage.setItem('idUsuario', sesion.idUsuario);
+                        localStorage.setItem(sesion.idUsuario, JSON.stringify(sesion));
+                        window.open('productos.html?correo=' + sesion.idUsuario, '_self');
                         break;
 
                     default:
