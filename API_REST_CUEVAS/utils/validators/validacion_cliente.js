@@ -1,5 +1,5 @@
 const { check } = require('express-validator')
-const {validateResults} = require('../handleValidator')
+const { validateResults } = require('../handleValidator')
 
 const validarRegistrarCliente = [ // agregar al procedimiento almacenado si existe el registro
     check('nombre')
@@ -22,8 +22,7 @@ const validarRegistrarCliente = [ // agregar al procedimiento almacenado si exis
     check('noCelular')
     .notEmpty(),
     check('fechaNacimiento')
-    .notEmpty()
-    .isLength({min:5, max:10}),
+    .notEmpty(),
     (req, res, next) => {
         return validateResults(req, res, next)
     }
@@ -51,8 +50,7 @@ const validarActualizarCliente = [
     .notEmpty(),
     check('fechaNacimiento')
     .notEmpty()
-    .exists()
-    .isLength({min:5, max:10}),
+    .exists(),
     (req, res, next) => {
         return validateResults(req, res, next)
     }
@@ -85,8 +83,7 @@ const validarRegistrarEmpleado = [ // agregar al procedimiento almacenado si exi
     .notEmpty(),
     check('idSucursal')
     .exists()
-    .notEmpty()
-    .isLength({min:5, max:10}),
+    .notEmpty(),
     (req, res, next) => {
         return validateResults(req, res, next)
     }
@@ -117,12 +114,11 @@ const validarActualizarEmpleado = [
     .notEmpty(),
     check('idSucursal')
     .exists()
-    .notEmpty()
-    .isLength({min:5, max:10}),
+    .notEmpty(),
     (req, res, next) => {
         return validateResults(req, res, next)
     }
 ];
 
 
-module.exports = { validarRegistrarCliente , validarActualizarCliente , validarRegistrarEmpleado , validarActualizarEmpleado}
+module.exports = { validarRegistrarCliente, validarActualizarCliente, validarRegistrarEmpleado, validarActualizarEmpleado }
