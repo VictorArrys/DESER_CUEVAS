@@ -7,9 +7,7 @@ function iniciarSesion() {
     let correoUsuario = formularioIniciarSesion.txtCorreo.value;
     let contrasenia = formularioIniciarSesion.txtPassword.value;
 
-
     console.log(contrasenia)
-
 
     var request = new XMLHttpRequest();
 
