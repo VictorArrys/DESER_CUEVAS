@@ -22,13 +22,16 @@ function validarUsuario() {
             let mostrarMensaje = document.getElementById("nombreCompleto");
             mostrarMensaje.innerHTML = usuario.nombre;
 
-            /*
+
             var urlCarritoCompras = document.getElementById("carritoCompras");
             urlCarritoCompras.href = "carritoCompras.html?idUsuario=" + usuario.idUsuario;
 
             var urlCarritoCompras = document.getElementById("productos");
             urlCarritoCompras.href = "productos.html?idUsuario=" + idUsuario;
-            */
+
+            var urlConsultarCliente = document.getElementById("consultarCliente");
+            urlConsultarCliente.href = "../vistaUsuario/consultarCliente.html?idUsuario=" + idUsuario;
+
         }
     } else {
         window.open('../index.html', '_self');
@@ -87,13 +90,11 @@ function mostrarProductos(data) {
 
         var producto = data[0]
         var imagen = data[0].archivo
-        var Imagen_Bin_String = bin2string(imagen);
-        var Imagen_Base64 = btoa(Imagen_Bin_String);
 
         var card = `<div class="col">
                         <div class="card" style="min-height: 300px;">
                             <div class="text-center">
-                                <img src="data:image/jpg;base64,' + ${Imagen_Base64} + '" class="card-img-top " style="width:140px; margin-top: 10px; border-radius: 20px;" alt="imgProducto"></img>
+                                <img src="http://localhost:3001/api/abarrotes_cuevas/1.0/img/productos/${imagen}" class="card-img-top " style="width:140px; margin-top: 10px; border-radius: 20px;" alt="imgProducto"></img>
                             </div>
                             <div class="card-body">
                                 <h6 class="fw-bold">${producto.nombreProducto}</h6>

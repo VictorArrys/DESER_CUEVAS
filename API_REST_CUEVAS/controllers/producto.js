@@ -18,6 +18,9 @@ const consultarProductos = (req, res) => {
             mysqlConnection.query(
                 query,
                 (error, resultadoInicio) => {
+
+
+
                     if (error) {
                         httpResponse(res, error = { "code": 500, "detailsError": error })
 
@@ -128,11 +131,15 @@ const registrarProducto = (req, res) => {
                     producto.precioVenta, producto.precioCompra, producto.idCatagoria, producto.nombre, imagen, 2
                 ],
                 (error, resultadoRegistro) => {
+
+                    console.log(resultadoRegistro);
+
                     if (error) {
                         httpResponse(res, error = { "code": 500, "detailsError": error })
 
                     } else {
                         var productoCreado;
+                        console.log(resultadoRegistro)
                         productoCreado = {
                             mensaje: mensajes.accionExitosa,
                             'insertado': resultadoRegistro['affectedRows']
