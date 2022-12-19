@@ -26,10 +26,10 @@ function validarUsuario() {
             mostrarMensaje.innerHTML = usuario.nombre;
 
             var urlEmpleados = document.getElementById("empleados");
-            urlEmpleados.href = "../vista_administrador/listaEmpleados.html?idUsuario=" + usuario.idUsuario;
+            urlEmpleados.href = "../views/vista_administrador/listaEmpleados.html?idUsuario=" + usuario.idUsuario;
 
             var urlProductos = document.getElementById("productos");
-            urlProductos.href = "../vista_administrador/productos.html?idUsuario=" + idUsuario;
+            urlProductos.href = "../views/vista_administrador/productos.html?idUsuario=" + idUsuario;
 
         }
     } else {

@@ -1,5 +1,4 @@
-var URL_HOST = "https://9f0f-2806-2f0-7080-c9c8-c1b4-9c34-e39b-24ff.ngrok.io/";
-// var URL_HOST = "http://localhost:4000/";
+const URL_HOST = "http://localhost:3001/api/abarrotes_cuevas/1.0"
 
 var usuario;
 var listaProductos = "";

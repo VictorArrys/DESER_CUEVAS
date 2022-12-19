@@ -73,12 +73,17 @@ function cargarProducto() {
 function mostrarProducto(productoConsultado) {
     console.log(productoConsultado)
     var imagen = productoConsultado.archivo
+    document.getElementById("productoTitulo").innerHTML = productoConsultado.nombreProducto;
+
     document.getElementById("imgPrducto").src = "http://localhost:3001/api/abarrotes_cuevas/1.0/img/products/" + imagen;
-    document.getElementById("tituloproducto").innerHTML = productoConsultado.nombreProducto;
+    document.getElementById("tituloproducto").innerHTML = "Producto: " + productoConsultado.nombreProducto;
     document.getElementById("costoproducto").innerHTML = "Precio: $" + productoConsultado.precioVenta;
-    document.getElementById("categoria").innerHTML = productoConsultado.nombreCategoria;
+    document.getElementById("categoria").innerHTML = "Categoria tipo: " + productoConsultado.nombreCategoria;
     document.getElementById("mensajeArticulosDisponibles").innerHTML = productoConsultado.cantidad;
 
+    document.getElementById("cantidadProducto").innerHTML = productoConsultado.cantidad;
+    document.getElementById("caducidad").innerHTML = productoConsultado.fechaCaducidad.substr(0, 10);
+    document.getElementById("descripcion").innerHTML = productoConsultado.descripcion;
 
 }
 

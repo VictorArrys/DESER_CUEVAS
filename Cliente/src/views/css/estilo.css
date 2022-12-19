@@ -30,12 +30,18 @@ body {
     color: white;
 }
 
-#headerModal {
-    background: #4D1E64;
+#menu li {
     color: white;
 }
 
-#backModal {
+#headerModal {
     box-shadow: 0 2px 12px 0 rgba(90, 40, 191, 0.5);
-    background: linear-gradient(135deg, #4D1E64, #637dfb)
+    background: linear-gradient(135deg, #4D1E64, #637dfb);
+    color: whitesmoke;
+}
+
+#tituloCard {
+    box-shadow: 0 2px 12px 0 rgba(90, 40, 191, 0.5);
+    background: linear-gradient(135deg, black, #581845);
+    color: whitesmoke;
 }
