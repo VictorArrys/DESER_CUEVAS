@@ -12,7 +12,6 @@ var idUsuario = parametro.get('idUsuario');
 
 
 function validarUsuario() {
-    alert("llegue aquí")
 
     usuario = JSON.parse(localStorage.getItem(idUsuario));
 
@@ -24,16 +23,12 @@ function validarUsuario() {
     } else if (usuario.tipo === "Cliente") {
         let mostrarMensaje = document.getElementById("nombreCompleto");
         mostrarMensaje.innerHTML = usuario.nombre;
-        alert("Ejemplo que jala")
 
         var urlCarritoCompras = document.getElementById("carritoCompras");
-        urlCarritoCompras.href = "carritoCompras.html?idUsuario=" + usuario.idUsuario;
+        urlCarritoCompras.href = "../vista_consumidor/carritoCompras.html?idUsuario=" + usuario.idUsuario;
 
         var urlProductos = document.getElementById("productos");
-        urlProductos.href = "productos.html?idUsuario=" + idUsuario;
-
-        var urlConsultarCliente = document.getElementById("consultarCliente");
-        urlConsultarCliente.href = "../vistaUsuario/consultarCliente.html?idUsuario=" + idUsuario;
+        urlProductos.href = "../vista_consumidor/productos.html?idUsuario=" + idUsuario;
 
     } else {
         window.open('../index.html', '_self');
@@ -90,26 +85,36 @@ function registrar() {
 
 function getUsuario() {
 
-    /*var nombreU = document.getElementById("txt_nombreG")
+    var nombreU = document.getElementById("txt_nombreG")
     var aPaternoU = document.getElementById("txt_aPaternoG")
     var aMaternoU = document.getElementById("txt_aMaternoG")
     var correoU = document.getElementById("txt_correoG")
     var claveU = document.getElementById("txt_celularG")
     var fechaNacimientoU = document.getElementById("txt_fNacimientoG")
 
-    try{
+    alert("Prueba que a mi si me sirve xD")
+
+    try {
 
         const idUsuario = 1;
         var request = new XMLHttpRequest();
+
+        request.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var data = JSON.parse(this.response);
+                console.log(data)
+            }
+        };
         request.open('GET', URL_HOST + "/clientes/" + idUsuario, true)
-        //request.setRequestHeader("Content-type", "application/json");
-        //request.setRequestHeader("x-access-token", usuario.token);
+        request.setRequestHeader("Content-type", "application/json");
+        request.setRequestHeader("x-access-token", usuario.token);
 
         request.send();
-    }catch (error){
+    } catch (error) {
         alert(`Ocurrió un error, intente más tarde o comuniquese con los profesionales`)
-    }*/
+    }
 }
+getUsuario()
 
 function modificar() {
     var nombreU = document.getElementById("txt_nombreG").value
