@@ -25,10 +25,12 @@ const consultarProductos = (req, res) => {
                         httpResponse(res, error = { "code": 500, "detailsError": error })
 
                     } else if (resultadoInicio.length == 0) {
-                        console.log(
-                            "¡Sin registros!"
-                        );
-                        httpResponse(res, error = { "code": 404, "detailsError": "" })
+                        var sinRegistros = {
+                            mensaje: mensajes.accionExitosa,
+                            resultado: "Sin registros"
+                        };
+
+                        res.status(200).json(sinRegistros);
 
                     } else {
 
@@ -67,7 +69,7 @@ const consultarCatalogoProductos = (req, res) => {
 
         if (respuesta.statusCode == 200) {
             const { idSucursal } = req.params
-            var query = "SELECT * FROM productoCatalogo WHERE idSucursal = ?";
+            var query = "SELECT * FROM productoCatalogo WHERE idSucursal = ? AND estatus = 1";
 
             mysqlConnection.query(
                 query, [idSucursal],
@@ -76,10 +78,13 @@ const consultarCatalogoProductos = (req, res) => {
                         httpResponse(res, error = { "code": 500, "detailsError": error })
 
                     } else if (resultadoInicio.length == 0) {
-                        console.log(
-                            "¡Sin registros!"
-                        );
-                        httpResponse(res, error = { "code": 404, "detailsError": "" })
+
+                        var sinRegistros = {
+                            mensaje: mensajes.accionExitosa,
+                            resultado: "Sin registros"
+                        };
+
+                        res.status(200).json(sinRegistros);
 
                     } else {
 
@@ -187,10 +192,12 @@ const agregarProductoInventario = (req, res) => {
                         httpResponse(res, error = { "code": 500, "detailsError": error })
 
                     } else if (resultadoInicio.length == 0) {
-                        console.log(
-                            "¡Sin registros!"
-                        );
-                        httpResponse(res, error = { "code": 404, "detailsError": "" })
+                        var sinRegistros = {
+                            mensaje: mensajes.accionExitosa,
+                            resultado: "Sin registros"
+                        };
+
+                        res.status(200).json(sinRegistros);
 
                     } else {
                         var productoAgregado;

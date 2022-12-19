@@ -22,10 +22,12 @@ const consultarCategorias = (req, res) => {
                         httpResponse(res, error = { "code": 500, "detailsError": error })
 
                     } else if (resultadoInicio.length == 0) {
-                        console.log(
-                            "¡Sin registros!"
-                        );
-                        httpResponse(res, error = { "code": 404, "detailsError": "" })
+                        var sinRegistros = {
+                            mensaje: mensajes.accionExitosa,
+                            resultado: "Sin registros"
+                        };
+
+                        res.status(200).json(sinRegistros);
 
                     } else {
 

@@ -1,40 +1,45 @@
-var URL_HOST = "http://localhost:3000/api/abarrotes_cuevas/1.0"
+var URL_HOST = "http://localhost:3001/api/abarrotes_cuevas/1.0"
 var usuario;
 var tokenCliente;
 
+var urlParametro = window.location.search;
+var parametro = new URLSearchParams(urlParametro);
+
+var idUsuario = parametro.get('idUsuario');
+
+
+
+
+
 function validarUsuario() {
+    alert("llegue aquí")
 
-    let miURL = document.location.href;
+    usuario = JSON.parse(localStorage.getItem(idUsuario));
 
-    if (miURL.indexOf('?') > 0) {
+    console.log("Imprimi el usuario")
+    console.log(usuario)
 
-        let valorUser = miURL.split('?')[1];
+    if (!usuario) {
+        window.open('../index.html', '_self');
+    } else if (usuario.tipo === "Cliente") {
+        let mostrarMensaje = document.getElementById("nombreCompleto");
+        mostrarMensaje.innerHTML = usuario.nombre;
+        alert("Ejemplo que jala")
 
-        let idUsuario = valorUser.split('=')[1];
+        var urlCarritoCompras = document.getElementById("carritoCompras");
+        urlCarritoCompras.href = "carritoCompras.html?idUsuario=" + usuario.idUsuario;
 
-        usuario = JSON.parse(localStorage.getItem(idUsuario));
+        var urlProductos = document.getElementById("productos");
+        urlProductos.href = "productos.html?idUsuario=" + idUsuario;
 
-        if (!usuario) {
-            window.open('../index.html', '_self');
-        } else if (usuario.tipo === "Cliente") {
-            let mostrarMensaje = document.getElementById("nombreCompleto");
-            mostrarMensaje.innerHTML = usuario.nombre;
+        var urlConsultarCliente = document.getElementById("consultarCliente");
+        urlConsultarCliente.href = "../vistaUsuario/consultarCliente.html?idUsuario=" + idUsuario;
 
-
-            var urlCarritoCompras = document.getElementById("carritoCompras");
-            urlCarritoCompras.href = "carritoCompras.html?idUsuario=" + usuario.idUsuario;
-
-            var urlProductos = document.getElementById("productos");
-            urlProductos.href = "productos.html?idUsuario=" + idUsuario;
-
-            var urlConsultarCliente = document.getElementById("consultarCliente");
-            urlConsultarCliente.href = "../vistaUsuario/consultarCliente.html?idUsuario=" + idUsuario;
-
-        }
     } else {
         window.open('../index.html', '_self');
     }
 }
+
 validarUsuario();
 
 

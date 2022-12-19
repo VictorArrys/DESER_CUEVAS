@@ -1,4 +1,4 @@
-var URL_HOST = "http://localhost:3001/api/abarrotes_cuevas/1.0"
+const URL_HOST = "http://localhost:3001/api/abarrotes_cuevas/1.0"
 
 var usuario;
 var listaProductos = "";
@@ -25,8 +25,8 @@ function validarUsuario() {
             var urlCarritoCompras = document.getElementById("carritoCompras");
             urlCarritoCompras.href = "carritoCompras.html?idUsuario=" + usuario.idUsuario;
 
-            var urlCarritoCompras = document.getElementById("productos");
-            urlCarritoCompras.href = "productos.html?idUsuario=" + idUsuario;
+            var urlProductos = document.getElementById("productos");
+            urlProductos.href = "productos.html?idUsuario=" + idUsuario;
 
             var urlConsultarCliente = document.getElementById("consultarCliente");
             urlConsultarCliente.href = "../vistaUsuario/consultarCliente.html?idUsuario=" + idUsuario;
@@ -48,11 +48,16 @@ function cerrarSesion() {
 function cargarProductos() {
 
     var request = new XMLHttpRequest();
+
     request.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var data = JSON.parse(this.response);
             listaProductos = data.resultado;
-            mostrarProductos(listaProductos);
+            console.log(listaProductos)
+
+            if (!listaProductos == "Sin registros") {
+                mostrarProductos(listaProductos);
+            }
         }
     };
 
@@ -94,7 +99,6 @@ function cargarCategorias() {
     request.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var data = JSON.parse(this.response);
-            console.log(data)
             mostrarCategorias(data.resultadoInicio);
         }
     };
@@ -121,7 +125,7 @@ function mostrarCategorias(data) {
 
 
 function verProducto(idProducto) {
-    //Brandon para acceder al ID del usuario nada más con el localStorage accedes.
+    // para acceder al ID del usuario nada más con el localStorage accedes.
     window.open('producto.html?idUsuario=' + usuario.idUsuario + '&idProducto=' + idProducto, '_self');
 }
 
