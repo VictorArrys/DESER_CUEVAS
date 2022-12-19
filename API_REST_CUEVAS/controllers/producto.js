@@ -62,6 +62,62 @@ const consultarProductos = (req, res) => {
 
 }
 
+const consultarCatalogoProducto = (req, res) => {
+    try {
+        const token = req.headers["x-access-token"];
+        var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente");
+
+        if (respuesta.statusCode == 200) {
+            const { idSucursal, idProducto } = req.params
+            var query = "SELECT productoCatalogo.*,categoria.nombreCategoria FROM productoCatalogo " +
+                "INNER JOIN categoria ON productoCatalogo.idCatagoria = categoria.idCategoria WHERE idSucursal = ? AND estatus = 1 AND " +
+                " productoCatalogo.codigoBarras = ?;"
+
+            mysqlConnection.query(
+                query, [idSucursal, idProducto],
+                (error, resultadoInicio) => {
+                    if (error) {
+                        httpResponse(res, error = { "code": 500, "detailsError": error })
+
+                    } else if (resultadoInicio.length == 0) {
+
+                        var sinRegistros = {
+                            mensaje: mensajes.accionExitosa,
+                            resultado: "Sin registros"
+                        };
+
+                        res.status(200).json(sinRegistros);
+
+                    } else {
+
+                        var producto = {
+                            mensaje: mensajes.accionExitosa,
+                            resultado: resultadoInicio
+                        };
+
+                        res.status(200).json(producto);
+
+                    }
+                }
+            );
+
+        } else if (respuesta.statusCode == 401) {
+            console.log("Token no valido en producto")
+            res.status(401);
+            httpResponse(res, error = { "code": 401, "detailsError": "" })
+
+        } else {
+
+            httpResponse(res, error = { "code": 500, "detailsError": "Hubo un problema al validar el token" })
+
+        }
+
+    } catch (exception) {
+        httpResponse(res, error = { "code": 500, "detailsError": exception.message })
+
+    }
+}
+
 const consultarCatalogoProductos = (req, res) => {
     try {
         const token = req.headers["x-access-token"];
@@ -69,7 +125,8 @@ const consultarCatalogoProductos = (req, res) => {
 
         if (respuesta.statusCode == 200) {
             const { idSucursal } = req.params
-            var query = "SELECT * FROM productoCatalogo WHERE idSucursal = ? AND estatus = 1";
+            var query = "SELECT productoCatalogo.*,categoria.nombreCategoria FROM productoCatalogo " +
+                "INNER JOIN categoria ON productoCatalogo.idCatagoria = categoria.idCategoria WHERE idSucursal = ? AND estatus = 1";
 
             mysqlConnection.query(
                 query, [idSucursal],
@@ -282,4 +339,4 @@ const modificarProducto = (req, res) => {
 
 }
 
-module.exports = { consultarProductos, consultarCatalogoProductos, registrarProducto, agregarProductoInventario, modificarProducto }
+module.exports = { consultarProductos, consultarCatalogoProductos, consultarCatalogoProducto, registrarProducto, agregarProductoInventario, modificarProducto }

@@ -5,7 +5,8 @@ const {
     consultarCatalogoProductos,
     registrarProducto,
     agregarProductoInventario,
-    modificarProducto
+    modificarProducto,
+    consultarCatalogoProducto
 } = require('../controllers/producto')
 const {
     validarRegistrarProducto,
@@ -58,6 +59,10 @@ router.get('/', consultarProductos)
 // ? GET request Consultar productos de lado del cliente
 // ! http://localhost:3001/api/abarrotes_cuevas/1.0/productos/sucursal/:idSucursal
 router.get('/sucursal/:idSucursal', validarConsultaCatalogo, consultarCatalogoProductos)
+
+// ? GET request Consultar productos de lado del cliente
+// ! http://localhost:3001/api/abarrotes_cuevas/1.0/productos/sucursal/:idSucursal/:idProducto
+router.get('/sucursal/:idSucursal/:idProducto', consultarCatalogoProducto)
 
 // ? PATCH request
 // ! http://localhost:3001/api/abarrotes_cuevas/1.0/productos/:idProducto

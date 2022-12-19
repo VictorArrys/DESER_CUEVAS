@@ -11,6 +11,7 @@ var idUsuario = parametro.get('idUsuario');
 
 
 
+// ! Validación de usuario para regresar al login si no esta logeado
 function validarUsuario() {
 
     usuario = JSON.parse(localStorage.getItem(idUsuario));
@@ -96,7 +97,6 @@ function getUsuario() {
 
     try {
 
-        const idUsuario = 1;
         var request = new XMLHttpRequest();
 
         request.onreadystatechange = function() {

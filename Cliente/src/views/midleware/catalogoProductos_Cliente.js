@@ -4,6 +4,7 @@ var usuario;
 var listaProductos = "";
 var listaProductosFiltrados = "";
 
+// ! Validación de usuario para regresar al login si no esta logeado
 function validarUsuario() {
 
     let miURL = document.location.href;
@@ -79,11 +80,11 @@ function mostrarProductos(data) {
         var card = `<div class="col">
                         <div class="card" style="min-height: 300px;">
                             <div class="text-center">
-                                <img src="http://localhost:3001/api/abarrotes_cuevas/1.0/img/productos/${imagen}" class="card-img-top " style="width:140px; margin-top: 10px; border-radius: 20px;" alt="imgProducto"></img>
+                                <img src="http://localhost:3001/api/abarrotes_cuevas/1.0/img/products/${imagen}" class="card-img-top " style="width:140px; margin-top: 10px; border-radius: 20px;" alt="imgProducto"></img>
                             </div>
                             <div class="card-body">
                                 <h6 class="fw-bold">${producto.nombreProducto}</h6>
-                                <h6> Precio: $${producto.precioVenta}</h6>
+                                <h6> precioVenta: $${producto.precioVenta}</h6>
                             </div>
                             <div class="d-grid gap-2 mb-1 mx-1">
                                 <button class="btn btn-primary btn-sm" onclick="verProducto(${producto.codigoBarras})">Ver producto</button>
@@ -122,11 +123,10 @@ function mostrarCategorias(data) {
 
 }
 
-
-
-function verProducto(idProducto) {
+function verProducto(idProductoSeleccionado) {
     // para acceder al ID del usuario nada más con el localStorage accedes.
-    window.open('producto.html?idUsuario=' + usuario.idUsuario + '&idProducto=' + idProducto, '_self');
+
+    window.open('producto.html?idUsuario=' + usuario.idUsuario + '&idProducto=' + idProductoSeleccionado, '_self');
 }
 
 function mostrarProductoCategoria(idCategoria) {
@@ -156,11 +156,11 @@ function ordenarPorPrecio(valor) {
 
         if (parseInt(valor)) {
             listaProductosCategorias.sort(function(a, b) {
-                return b.precio - a.precio;
+                return b.precioVenta - a.precioVenta;
             });
         } else {
             listaProductosCategorias.sort(function(a, b) {
-                return a.precio - b.precio;
+                return a.precioVenta - b.precioVenta;
             });
         }
         contenedorProductos.innerHTML = "";
@@ -169,11 +169,11 @@ function ordenarPorPrecio(valor) {
     } else {
         if (parseInt(valor)) {
             listaProductosFiltrados.sort(function(a, b) {
-                return b.precio - a.precio;
+                return b.precioVenta - a.precioVenta;
             });
         } else if (!parseInt(valor)) {
             listaProductosFiltrados.sort(function(a, b) {
-                return a.precio - b.precio;
+                return a.precioVenta - b.precioVenta;
             });
         }
         contenedorProductos.innerHTML = "";
@@ -192,14 +192,14 @@ function buscarProducto() {
     if (txtBuscarProducto.value.length != 0) {
         if (listaProductosFiltrados.length == 0) {
 
-            resultadosProductos = listaProductos.filter(producto => producto.nombre.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()) ||
-                producto.precio.toString().includes(txtBuscarProducto.value) ||
-                producto.nombreCatego.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()));
+            resultadosProductos = listaProductos.filter(producto => producto.nombreProducto.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()) ||
+                producto.precioVenta.toString().includes(txtBuscarProducto.value) ||
+                producto.nombreCategoria.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()));
 
         } else {
             resultadosProductos = listaProductosFiltrados.filter(producto => producto.nombre.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()) ||
-                producto.precio.toString().includes(txtBuscarProducto.value) ||
-                producto.nombreCatego.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()));
+                producto.precioVenta.toString().includes(txtBuscarProducto.value) ||
+                producto.nombreCategoria.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()));
         }
         contenedorProductos.innerHTML = "";
         mostrarProductos(resultadosProductos);
@@ -215,7 +215,7 @@ function buscadorVacio() {
     var enterBuscador = document.getElementById("txtBuscarProducto");
     if (enterBuscador.value.length == 0) {
         cargarProductos();
-        document.getElementById("selectorprecio").value = -1;
+        document.getElementById("selectorprecioVenta").value = -1;
         document.getElementById("selectorcategoria").value = -1;
     }
 }

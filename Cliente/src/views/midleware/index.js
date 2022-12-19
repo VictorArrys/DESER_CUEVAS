@@ -41,7 +41,7 @@ function iniciarSesion() {
                     case "Administrador":
                         localStorage.setItem('idUsuario', sesion.idUsuario);
                         localStorage.setItem(sesion.idUsuario, JSON.stringify(sesion));
-                        window.open('productos.html?idUsuario=' + sesion.idUsuario, '_self');
+                        window.open('../views/vista_administrador/listaEmpleados.html?idUsuario=' + sesion.idUsuario, '_self');
                         break;
 
                     default:

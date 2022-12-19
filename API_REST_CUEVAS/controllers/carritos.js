@@ -75,12 +75,6 @@ const agregarProductoCarrito = (req, res) => {
                     if (error) {
                         httpResponse(res, error = { "code": 500, "detailsError": error })
 
-                    } else if (resultadoInicio.length == 0) {
-                        console.log(
-                            "¡Sin registros!"
-                        );
-                        httpResponse(res, error = { "code": 404, "detailsError": "" })
-
                     } else {
 
                         var productoCarrito = {

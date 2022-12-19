@@ -20,7 +20,7 @@ fs.readdirSync(pathRouter).filter((file) => {
 
 // ? GET request 
 // ! http://localhost:3001/api/abarrotes_cuevas/1.0/img/productos/:nombreimagen
-router.use('/img/productos', express.static('img/products'));
+router.use('/img/products', express.static('img/products'));
 
 router.get('*', (req, res) => {
 
