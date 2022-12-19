@@ -22,7 +22,6 @@ function validarUsuario() {
             let mostrarMensaje = document.getElementById("nombreCompleto");
             mostrarMensaje.innerHTML = usuario.nombre;
 
-
             var urlCarritoCompras = document.getElementById("carritoCompras");
             urlCarritoCompras.href = "carritoCompras.html?idUsuario=" + usuario.idUsuario;
 
@@ -48,8 +47,8 @@ function cerrarSesion() {
 
 function cargarProductos() {
 
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var data = JSON.parse(this.response);
             listaProductos = data.resultado;
@@ -57,32 +56,13 @@ function cargarProductos() {
         }
     };
 
-    const idSucursal = 1
+    request.open("GET", URL_HOST + "/productos/sucursal/" + 1, true);
+    request.setRequestHeader("Content-type", "application/json");
+    request.setRequestHeader("x-access-token", usuario.token);
 
-    xhttp.open("GET", URL_HOST + "/productos/sucursal/" + 1, true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.setRequestHeader("x-access-token", usuario.token);
-
-    xhttp.send();
+    request.send();
 
 }
-
-function toBase64(arr) {
-    //arr = new Uint8Array(arr) if it's an ArrayBuffer
-    return btoa(
-        arr.reduce((data, byte) => data + String.fromCharCode(byte), '')
-    );
-}
-
-function bin2string(array) {
-    var result = "";
-    for (var i = 0; i < array.length; ++i) {
-        result += (String.fromCharCode(array[i]));
-    }
-    return result;
-}
-
-
 
 function mostrarProductos(data) {
 
@@ -110,8 +90,8 @@ function mostrarProductos(data) {
 }
 
 function cargarCategorias() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var data = JSON.parse(this.response);
             console.log(data)
@@ -119,11 +99,11 @@ function cargarCategorias() {
         }
     };
 
-    xhttp.open("GET", URL_HOST + "/categorias/", true);
-    xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.setRequestHeader("x-access-token", usuario.token);
+    request.open("GET", URL_HOST + "/categorias/", true);
+    request.setRequestHeader("Content-type", "application/json");
+    request.setRequestHeader("x-access-token", usuario.token);
 
-    xhttp.send();
+    request.send();
 }
 
 function mostrarCategorias(data) {
