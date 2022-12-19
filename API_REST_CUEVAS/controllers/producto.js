@@ -116,13 +116,10 @@ const registrarProducto = (req, res) => {
 
         if (respuesta.statusCode == 200) {
             const producto = req.body;
-            var imagen = req.file.buffer
             console.log(imagen)
-            console.log("Body")
-            console.log(producto)
 
             // ? Guardar imagen en carpeta  
-
+            var imagen = req.file.filename;
 
             var query = "CALL nuevoProducto(?,?,?,?,?,?,?,?,?,?);"
 
@@ -135,7 +132,6 @@ const registrarProducto = (req, res) => {
                         httpResponse(res, error = { "code": 500, "detailsError": error })
 
                     } else {
-                        console.log(resultadoRegistro)
                         var productoCreado;
                         productoCreado = {
                             mensaje: mensajes.accionExitosa,
@@ -228,7 +224,10 @@ const modificarProducto = (req, res) => {
         if (respuesta.statusCode == 200) {
             const { idProducto } = req.params;
             const producto = req.body;
-            var imagen = req.file.buffer
+
+            // ? Guardar imagen en carpeta  
+            var imagen = req.file.filename;
+
             console.log("Modificar producto")
             console.log(imagen)
             console.log("Body")

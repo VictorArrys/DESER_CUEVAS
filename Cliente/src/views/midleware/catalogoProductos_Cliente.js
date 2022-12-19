@@ -1,7 +1,6 @@
 var URL_HOST = "http://localhost:3001/api/abarrotes_cuevas/1.0"
 
 var usuario;
-var tokenCliente;
 var listaProductos = "";
 var listaProductosFiltrados = "";
 
@@ -23,12 +22,13 @@ function validarUsuario() {
             let mostrarMensaje = document.getElementById("nombreCompleto");
             mostrarMensaje.innerHTML = usuario.nombre;
 
+            /*
             var urlCarritoCompras = document.getElementById("carritoCompras");
             urlCarritoCompras.href = "carritoCompras.html?idUsuario=" + usuario.idUsuario;
 
             var urlCarritoCompras = document.getElementById("productos");
             urlCarritoCompras.href = "productos.html?idUsuario=" + idUsuario;
-
+            */
         }
     } else {
         window.open('../index.html', '_self');

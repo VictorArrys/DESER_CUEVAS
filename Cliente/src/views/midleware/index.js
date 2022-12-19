@@ -43,7 +43,7 @@ function iniciarSesion() {
                     case "Administrador":
                         localStorage.setItem('idUsuario', sesion.idUsuario);
                         localStorage.setItem(sesion.idUsuario, JSON.stringify(sesion));
-                        window.open('productos.html?correo=' + sesion.idUsuario, '_self');
+                        window.open('productos.html?idUsuario=' + sesion.idUsuario, '_self');
                         break;
 
                     default:

@@ -14,12 +14,38 @@ const {
     validarConsultaCatalogo
 } = require('../utils/validators/validacion_producto')
 
+const mimeTypes = require('mime-types');
+
 const multer = require('multer');
-const multerUpload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 8 * 1024 * 1024 * 15 } })
+
+var codigoBarras
+
+const storage = multer.diskStorage({
+
+    destination(req, file, cb) {
+        cb(null, 'img/products');
+    },
+    filename: function(req, file, cb) {
+
+        cb(null, 'img-' + req.body.codigoBarras + '.' + mimeTypes.extension(file.mimetype))
+    }
+});
+//////////////////////////////////////////////  
+
+var upload = multer({ storage: storage });
+
+/*
+const addCodigoBarras = (req, res, next) => {
+    console.log("El body")
+    console.log(req.body)
+    codigoBarras = req.body.codigoBarras
+    return next()
+}
+*/
 
 // ? POST request 
 // ! http://localhost:3001/api/abarrotes_cuevas/1.0/productos
-router.post('/', multerUpload.single('imagen'), validarRegistrarProducto, registrarProducto)
+router.post('/', upload.single('imagen'), validarRegistrarProducto, registrarProducto)
 
 // ? POST request 
 // ! http://localhost:3001/api/abarrotes_cuevas/1.0/productos/:idSucursal/:idProducto
@@ -35,6 +61,6 @@ router.get('/sucursal/:idSucursal', validarConsultaCatalogo, consultarCatalogoPr
 
 // ? PATCH request
 // ! http://localhost:3001/api/abarrotes_cuevas/1.0/productos/:idProducto
-router.patch('/:idProducto', multerUpload.single('imagen'), validarModificarProducto, modificarProducto)
+router.patch('/:idProducto', upload.single('imagen'), validarModificarProducto, modificarProducto)
 
 module.exports = router;

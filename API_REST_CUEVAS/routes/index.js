@@ -8,20 +8,24 @@ const removeExtension = (fileName) => {
     return fileName.split('.').shift()
 }
 
-fs.readdirSync(pathRouter).filter((file) =>{
+fs.readdirSync(pathRouter).filter((file) => {
     const fileWithOutExt = removeExtension(file)
     const skip = ['index'].includes(fileWithOutExt)
-    if(!skip){
+    if (!skip) {
         router.use(`/${fileWithOutExt}`, require(`./${fileWithOutExt}`))
         console.log('CARGAR RUTA----------->', fileWithOutExt)
     }
 
 });
 
-router.get('*', (req,res) => {
+// ? GET request 
+// ! http://localhost:3001/api/abarrotes_cuevas/1.0/img/productos/:nombreimagen
+router.use('/img/productos', express.static('img/products'));
+
+router.get('*', (req, res) => {
 
     res.status(404)
-    res.send({ error: 'No se encontro la ruta buscada'})
+    res.send({ error: 'No se encontro la ruta buscada' })
 });
 
 module.exports = router
