@@ -1,6 +1,25 @@
 var URL_HOST = "http://localhost:3001/api/abarrotes_cuevas/1.0";
-var token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzdWFyaW8iOjIsImNvcnJlbyI6ImxldmF0aG9zMTZAZ21haWwuY29tIiwidGlwbyI6IkFkbWluaXN0cmFkb3IiLCJpYXQiOjE2NzE0ODYxODUsImV4cCI6MTY3MTQ5MzM4NX0._MkDB_k7g21IKAiwQjy7dy26jk0gizOUaAa3LW8Sl_s";
+var token;
+///////////////////////////////
+
+var usuario;
+
+// ! Validación de usuario para regresar al login si no esta logeado
+function validarUsuario() {
+  let miURL = document.location.href;
+  console.log(localStorage);
+  if (miURL.indexOf("?") > 0) {
+    let valorUser = miURL.split("?")[1];
+
+    let idUsuario = valorUser.split("=")[1];
+
+    usuario = JSON.parse(localStorage.getItem(idUsuario));
+    token = usuario.token;
+  } else {
+    window.open("../index.html", "_self");
+  }
+}
+validarUsuario();
 
 function registrarEmpleado() {
   let nombre = document.getElementById("txt_Nombre").value;
@@ -59,6 +78,7 @@ function registrarEmpleado() {
 
 window.onload = function () {
   cargarSucursales();
+  console.log("Información usuario: " + JSON.stringify(usuario));
 };
 
 function validarDatos() {
@@ -123,4 +143,10 @@ function cargarSucursales() {
   request.send();
 
   return false;
+}
+
+function cancelar() {
+  localStorage.setItem("idUsuario", usuario.idUsuario);
+  localStorage.setItem(usuario.idUsuario, JSON.stringify(usuario));
+  window.open("./listaEmpleados.html?idUsuario=" + usuario.idUsuario, "_self");
 }
