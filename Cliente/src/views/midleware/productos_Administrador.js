@@ -1,4 +1,5 @@
 const URL_HOST = "http://localhost:3001/api/abarrotes_cuevas/1.0"
+var token;
 
 var listaProductos = "";
 var listaProductosAuxiliar = "";
@@ -6,28 +7,40 @@ var listaProductosAuxiliar = "";
 // ?
 var urlParametro = window.location.search;
 var parametro = new URLSearchParams(urlParametro);
-var idUsuario = parametro.get('idUsuario');
-var usuario = "";
+var usuario;
 // ?
 
 // ! Validación de usuario para regresar al login si no esta logeado
 function validarUsuario() {
+    let miURL = document.location.href;
 
-    usuario = JSON.parse(localStorage.getItem(idUsuario));
+    if (miURL.indexOf("?") > 0) {
+        let valorUser = miURL.split("?")[1];
 
-    if (!usuario) {
-        window.open('../index.html', '_self');
-    } else if (usuario.tipo === "Administrador") {
+        let idUsuario = valorUser.split("=")[1];
 
-        let mostrarMensaje = document.getElementById("nombreCompleto");
+        usuario = JSON.parse(localStorage.getItem(idUsuario));
 
-        mostrarMensaje.innerHTML = usuario.nombre;
+        token = usuario.token;
+        console.log(usuario.tipo)
+        if (!usuario) {
+            window.open("../index.html", "_self");
+        } else if (usuario.tipo === 'Administrador') {
 
-        var urlUsuarios = document.getElementById("gestionUsuarios");
-        urlUsuarios.href = "../vista_administrador/productos.html?idUsuario=" + idUsuario;
+            let mostrarMensaje = document.getElementById("nombreAdmin");
+            mostrarMensaje.innerHTML = usuario.nombre;
 
+            var urlEmpleados = document.getElementById("gestionarEmpleados");
+            urlEmpleados.href =
+                "../vista_administrador/listaEmpleados.html?idUsuario=" +
+                usuario.idUsuario;
+
+            var urlProductos = document.getElementById("gestionarProductos");
+            urlProductos.href =
+                "../vista_administrador/productos.html?idUsuario=" + idUsuario;
+        }
     } else {
-        window.open('../index.html', '_self');
+        window.open("../index.html", "_self");
     }
 }
 validarUsuario();
@@ -44,14 +57,16 @@ function cargarProductos() {
 
     var request = new XMLHttpRequest();
 
-    request.open('GET', URL_HOST + "productosCategorias", true);
+    request.open('GET', URL_HOST + "/productos", true);
+    request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+    request.setRequestHeader("x-access-token", token);
 
     request.onload = function() {
         if (request.status >= 200 && request.status < 300) {
             let productos = JSON.parse(this.response);
             listaProductos = productos;
             // listaProductosAuxiliar = JSON.parse( JSON.stringify(listaProductosAuxiliar));
-
+            console.log(listaProductos);
             cargarTablaProductos(listaProductos);
         }
     }
@@ -73,50 +88,40 @@ function cargarTablaProductos(productosLista) {
             let cellImg = nuevaFila.insertCell();
             let cellIdProducto = nuevaFila.insertCell();
             let cellNombre = nuevaFila.insertCell();
-            let cellPrecio = nuevaFila.insertCell();
-            let cellCantidad = nuevaFila.insertCell();
+            let cellPrecioVenta = nuevaFila.insertCell();
+            let cellPrecioCompra = nuevaFila.insertCell();
             let cellIdCategoria = nuevaFila.insertCell();
-            let cellEstatus = nuevaFila.insertCell();
+            let cellDescripcion = nuevaFila.insertCell();
             let cellModificar = nuevaFila.insertCell();
-            let cellEliminar = nuevaFila.insertCell();
 
-            let idProducto = document.createTextNode(productosLista[key].idProducto);
-            let nombre = document.createTextNode(productosLista[key].nombre);
-            let precio = document.createTextNode("$" + productosLista[key].precio);
-            let cantidad = document.createTextNode(productosLista[key].cantidad);
-            let idCategoria = document.createTextNode(productosLista[key].nombreCatego);
-            let estatus = document.createTextNode(productosLista[key].estatus == 1 ? "Disponible" : "Agotado");
+            let idProducto = document.createTextNode(productosLista[key].codigoBarras);
+            let nombre = document.createTextNode(productosLista[key].nombreProducto);
+            let precioVenta = document.createTextNode("$" + productosLista[key].precioVenta);
+            let precioCompra = document.createTextNode("$" + productosLista[key].precioCompra);
+            let idCategoria = document.createTextNode(productosLista[key].idCatagoria);
+            let descripcion = document.createTextNode(productosLista[key].descripcion);
 
             let btnModificar = document.createElement("button");
 
             btnModificar.setAttribute("type", "button");
             btnModificar.setAttribute("class", "btn btn-warning btn-sm");
-            btnModificar.setAttribute("value", productosLista[key].idProducto);
+            btnModificar.setAttribute("value", productosLista[key].codigoBarras);
             btnModificar.setAttribute("onclick", "modificarProducto(this.value)");
             btnModificar.innerText = "Modificar";
 
-            let btnEliminar = document.createElement("button");
-
-            btnEliminar.setAttribute("type", "button");
-            btnEliminar.setAttribute("class", "btn btn-danger btn-sm");
-            btnEliminar.setAttribute("value", productosLista[key].idProducto);
-            btnEliminar.setAttribute("onclick", "eliminarProducto(this.value)");
-            btnEliminar.innerText = "Eliminar";
-
             cellIdProducto.appendChild(idProducto);
             cellNombre.appendChild(nombre);
-            cellPrecio.appendChild(precio);
-            cellCantidad.appendChild(cantidad);
+            cellPrecioVenta.appendChild(precioVenta);
+            cellPrecioCompra.appendChild(precioCompra);
             cellIdCategoria.appendChild(idCategoria);
-            cellEstatus.appendChild(estatus);
+            cellDescripcion.appendChild(descripcion);
             cellModificar.appendChild(btnModificar);
-            cellEliminar.appendChild(btnEliminar);
 
-            if (productosLista[key].ruta) {
+            /*if (productosLista[key].ruta) {
                 let inputImg = document.createElement("img");
                 inputImg.setAttribute("style", "width: 80px;");
                 inputImg.setAttribute("alt", "imgproducto");
-                inputImg.setAttribute("src", URL_HOST + "imagenesProductos/" + productosLista[key].ruta);
+                inputImg.setAttribute("src", URL_HOST + "/img/products/" + productosLista[key].archivo);
 
                 let contenedorIMG = document.createElement("div");
                 contenedorIMG.setAttribute("class", "text-center");
@@ -124,7 +129,7 @@ function cargarTablaProductos(productosLista) {
                 contenedorIMG.appendChild(inputImg);
 
                 cellImg.appendChild(contenedorIMG);
-            }
+            }*/
         }
     }
 }
@@ -137,7 +142,9 @@ function cargarComboCategoria() {
 
     var request = new XMLHttpRequest();
 
-    request.open('GET', URL_HOST + "categorias/obtenerCategorias", true);
+    request.open('GET', URL_HOST + "/categorias", true);
+    request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+    request.setRequestHeader("x-access-token", token);
 
     request.onload = function() {
         if (request.status >= 200 && request.status < 300) {
@@ -149,9 +156,9 @@ function cargarComboCategoria() {
 
                 if (categorias.hasOwnProperty(key)) {
 
-                    var opcionCategoria = new Option(categorias[key].nombreCatego, categorias[key].idCatego);
+                    var opcionCategoria = new Option(categorias[key].nombreCategoria, categorias[key].idCategoria);
                     selectCategoria.options.add(opcionCategoria);
-                    var opcionCategoriaDos = new Option(categorias[key].nombreCatego, categorias[key].idCatego);
+                    var opcionCategoriaDos = new Option(categorias[key].nombreCategoria, categorias[key].idCategoria);
                     selectorCategorias.options.add(opcionCategoriaDos);
                 }
             }
@@ -164,31 +171,36 @@ cargarComboCategoria();
 
 function registrarProducto() {
 
-    let formularioIniciarSesion = document.forms.formularioRegistrarProducto;
+    let formularioEditarProducto = document.forms.formularioRegistrarProducto;
 
-    let imageProductoVista = formularioIniciarSesion.txtImagenProducto.files[0];
-    let txtProducto = formularioIniciarSesion.txtProducto.value;
-    let txtPrecio = formularioIniciarSesion.txtPrecio.value;
-    let txtCantidad = formularioIniciarSesion.txtCantidad.value;
-    let selectCategoria = formularioIniciarSesion.selectCategoria.value;
+    let imageProductoVista = formularioEditarProducto.txtImagenProducto.files[0];
+    let txtCodigoBarras = formularioEditarProducto.txtCodigoBarras.value;
+    let txtProducto = formularioEditarProducto.txtProducto.value;
+    let txtDescripcion = formularioEditarProducto.txtDescripcion.value;
+    let txtPrecioVenta = formularioEditarProducto.txtPrecioVenta.value;
+    let txtPrecioCompra = formularioEditarProducto.txtPrecioCompra.value;
+    let selectCategoria = formularioEditarProducto.selectCategoria.value;
 
     var producto = new FormData();
 
-    producto.append("nombre", txtProducto);
-    producto.append("precio", txtPrecio);
-    producto.append("cantidad", txtCantidad);
+    producto.append("codigoBarras", txtCodigoBarras);
+    producto.append("descripcion", txtDescripcion);
+    producto.append("ciudad", "Xalapa");
+    producto.append("estatus", 1);
+    producto.append("precioVenta", txtPrecioVenta);
+    producto.append("precioCompra", txtPrecioCompra);
     producto.append("idCategoria", selectCategoria);
-    producto.append("estatus", txtCantidad == "0" ? 0 : 1);
+    producto.append("nombreProducto", txtProducto);
     producto.append("imagen", imageProductoVista);
 
     var request = new XMLHttpRequest();
 
-    request.open('POST', URL_HOST + "registrar", true);
+    request.open('POST', URL_HOST + "/productos", true);
 
     request.onload = function() {
         if (request.status >= 200 && request.status < 300) {
 
-            let mostrarMensaje = document.getElementById("mosntrarMensaje");
+            let mostrarMensaje = document.getElementById("mostrarMensaje");
 
             if (this.response == 1) {
 
@@ -214,61 +226,6 @@ function registrarProducto() {
     return false;
 }
 
-function eliminarProducto(idProducto) {
-
-    document.getElementById("confirmacionBody").innerHTML = 'Esta apunto de eliminar un producto de la lista. <br>' +
-        '<strong> ¿Esta seguro de eliminarlo?</strong>';
-    document.getElementById("btnEliminarProducto").innerHTML = 'Eliminar';
-
-    var btnSolicitarConfirmacion = document.getElementById("btnSolicitarConfirmacion");
-    btnSolicitarConfirmacion.click();
-
-    var btnEliminarProducto = document.getElementById("btnEliminarProducto");
-
-    var contador = 0;
-
-    btnEliminarProducto.addEventListener("click", function() {
-
-        if (contador == 0) {
-
-            var request = new XMLHttpRequest();
-
-            request.open('DELETE', URL_HOST + "eliminar/" + idProducto, true);
-
-            request.onload = function() {
-                if (request.status >= 200 && request.status < 300) {
-
-                    let mostrarMensaje = document.getElementById("mosntrarMensaje");
-
-                    if (this.response == 1) {
-
-                        mostrarMensaje.innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert">' +
-                            '<strong id="mensajeAlerta"> Se elimino el Producto</strong>' +
-                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                            '</div>';
-                        cargarProductos();
-
-                    } else {
-                        mostrarMensaje.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
-                            '<strong id="mensajeAlerta"> No se pudo eliminar el producto</strong>' +
-                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                            '</div>';
-                    }
-                }
-            }
-
-            request.send();
-
-            var btnCerrarModalConfirmacion = document.getElementById("btnCerrarModalConfirmacion");
-            btnCerrarModalConfirmacion.click();
-        }
-        ++contador;
-    });
-
-
-
-}
-
 function modificarProducto(idProducto) {
 
     let btnModificarProducto = document.getElementById("btnRegistrarNuevoProducto");
@@ -289,20 +246,23 @@ function modificarProducto(idProducto) {
 
         if (listaProductos.hasOwnProperty(key)) {
 
-            if (listaProductos[key].idProducto == idProducto) {
+            if (listaProductos[key].codigoBarras == codigoBarras) {
 
-                if (listaProductos[key].ruta) {
+                /*if (listaProductos[key].archivo) {
                     const imageProductoVista = document.getElementById("imageProductoVista");
                     imageProductoVista.setAttribute("class", "img-fluid");
 
-                    imageProductoVista.src = URL_HOST + "imagenesProductos/" + listaProductos[key].ruta;
-                }
+                    imageProductoVista.src = URL_HOST + "/img/products/" + listaProductos[key].archivo;
+                }*/
 
-                formularioIniciarSesion.txtIdProducto.value = listaProductos[key].idProducto;
-                formularioIniciarSesion.txtProducto.value = listaProductos[key].nombre;
-                formularioIniciarSesion.txtPrecio.value = listaProductos[key].precio;
-                formularioIniciarSesion.txtCantidad.value = listaProductos[key].cantidad;
+                formularioIniciarSesion.txtCodigoBarras.value = listaProductos[key].codigoBarras;
+                formularioIniciarSesion.txtProducto.value = listaProductos[key].nombreProducto;
+                formularioIniciarSesion.txtDescripcion = listaProductos[key].descripcion;
+                formularioIniciarSesion.txtPrecioVenta.value = listaProductos[key].precioVenta;
+                formularioIniciarSesion.txtPrecioCompra.value = listaProductos[key].precioCompra;
                 formularioIniciarSesion.selectCategoria.value = listaProductos[key].idCategoria;
+
+                
 
                 return;
             }
@@ -329,37 +289,40 @@ function guardarProductoModificado() {
 
             let formularioIniciarSesion = document.forms.formularioRegistrarProducto;
 
-            let txtIdProducto = formularioIniciarSesion.txtIdProducto.value;
             let imageProductoVista = formularioIniciarSesion.txtImagenProducto.files[0];
+            let txtCodigoBarras = formularioIniciarSesion.txtCodigoBarras.value;
             let txtProducto = formularioIniciarSesion.txtProducto.value;
-            let txtPrecio = formularioIniciarSesion.txtPrecio.value;
-            let txtCantidad = formularioIniciarSesion.txtCantidad.value;
+            let txtDescripcion = formularioIniciarSesion.txtDescripcion.value;
+            let txtPrecioVenta = formularioIniciarSesion.txtPrecioVenta.value;
+            let txtPrecioCompra = formularioIniciarSesion.txtPrecioCompra.value;
             let selectCategoria = formularioIniciarSesion.selectCategoria.value;
 
             var producto = new FormData();
 
-            producto.append("idProducto", txtIdProducto);
-            producto.append("nombre", txtProducto);
-            producto.append("precio", txtPrecio);
-            producto.append("cantidad", txtCantidad);
+            producto.append("codigoBarras", txtCodigoBarras);
+            producto.append("descripcion", txtDescripcion);
+            producto.append("ciudad", "Xalapa");
+            producto.append("estatus", 1);
+            producto.append("precioVenta", txtPrecioVenta);
+            producto.append("precioCompra", txtPrecioCompra);
             producto.append("idCategoria", selectCategoria);
-            producto.append("estatus", txtCantidad == "0" ? 0 : 1);
+            producto.append("nombreProducto", txtProducto);
             producto.append("imagen", imageProductoVista);
 
             var request = new XMLHttpRequest();
 
-            request.open('PUT', URL_HOST + "actualizar", true);
+            request.open('PUT', URL_HOST + "/productos/:" + codigoBarras, true);
 
             request.onload = function() {
                 if (request.status >= 200 && request.status < 300) {
 
-                    let mostrarMensaje = document.getElementById("mosntrarMensaje");
+                    let mostrarMensaje = document.getElementById("mostrarMensaje");
 
                     if (this.response == 1) {
 
 
                         mostrarMensaje.innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert">' +
-                            '<strong id="mensajeAlerta"> Se modifico el Producto</strong>' +
+                            '<strong id="mensajeAlerta"> Se modificó el Producto</strong>' +
                             '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
                             '</div>';
 
@@ -483,70 +446,6 @@ function ordenarPorPrecio(valor) {
     }
 }
 
-function ordenarPorCantidad(valor) {
-
-    if (listaProductosAuxiliar.length == 0) {
-
-        if (parseInt(valor)) {
-            listaProductos.sort(function(a, b) {
-                return b.cantidad - a.cantidad;
-            });
-        } else {
-            listaProductos.sort(function(a, b) {
-                return a.cantidad - b.cantidad;
-            });
-        }
-        listaProductosAuxiliar = "";
-        cargarTablaProductos(listaProductos);
-
-    } else {
-        if (parseInt(valor)) {
-            listaProductosAuxiliar.sort(function(a, b) {
-                return b.cantidad - a.cantidad;
-            });
-        } else if (!parseInt(valor)) {
-            listaProductosAuxiliar.sort(function(a, b) {
-                return a.cantidad - b.cantidad;
-            });
-        }
-        cargarTablaProductos(listaProductosAuxiliar);
-
-    }
-
-}
-
-function ordenarPorEstatus(valor) {
-
-    if (listaProductosAuxiliar.length == 0) {
-
-        if (parseInt(valor)) {
-            listaProductos.sort(function(a, b) {
-                return b.estatus - a.estatus;
-            });
-        } else {
-            listaProductos.sort(function(a, b) {
-                return a.estatus - b.estatus;
-            });
-        }
-        listaProductosAuxiliar = "";
-        cargarTablaProductos(listaProductos);
-
-    } else {
-        if (parseInt(valor)) {
-            listaProductosAuxiliar.sort(function(a, b) {
-                return b.estatus - a.estatus;
-            });
-        } else if (!parseInt(valor)) {
-            listaProductosAuxiliar.sort(function(a, b) {
-                return a.estatus - b.estatus;
-            });
-        }
-        cargarTablaProductos(listaProductosAuxiliar);
-
-    }
-
-}
-
 function buscarProducto() {
 
     var txtBuscarProducto = document.getElementById("txtBuscarProducto");
@@ -557,16 +456,14 @@ function buscarProducto() {
 
         if (listaProductosAuxiliar.length == 0) {
             listaProductosAuxiliar = "";
-            resultadosProductos = listaProductos.filter(producto => producto.nombre.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()) ||
-                producto.precio.toString().includes(txtBuscarProducto.value) ||
-                producto.cantidad.toString().includes(txtBuscarProducto.value) ||
-                producto.nombreCatego.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()));
+            resultadosProductos = listaProductos.filter(producto => producto.nombreProducto.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()) ||
+                producto.precioCompra.toString().includes(txtBuscarProducto.value) ||
+                producto.idCatagoria.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()));
 
         } else {
-            resultadosProductos = listaProductosAuxiliar.filter(producto => producto.nombre.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()) ||
-                producto.precio.toString().includes(txtBuscarProducto.value) ||
-                producto.cantidad.toString().includes(txtBuscarProducto.value) ||
-                producto.nombreCatego.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()));
+            resultadosProductos = listaProductosAuxiliar.filter(producto => producto.nombreProducto.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()) ||
+                producto.precioCompra.toString().includes(txtBuscarProducto.value) ||
+                producto.idCatagoria.toLowerCase().includes(txtBuscarProducto.value.toLowerCase()));
         }
         cargarTablaProductos(resultadosProductos);
     } else {
@@ -585,13 +482,6 @@ function buscadorVacio() {
     if (enterBuscador.value.length == 0) {
         buscarProducto();
     }
-}
-
-function cerrarSesion() {
-    localStorage.removeItem(usuario.idUsuario);
-    setTimeout(() => {
-        window.open('index.html', '_self');
-    }, 1000);
 }
 
 window.onload = function() {
