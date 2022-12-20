@@ -10,10 +10,6 @@ var pool;
 
 pool = mysql.createPool(SERVER_CREDENTTIALS);
 console.log("Configuracion de Base de datos en Server")
-<<<<<<< HEAD
-=======
-
->>>>>>> 3d4f563553ccabb8903c7889dfe6970c09a600ce
 
 /*
 pool = mysql.createPool(LOCAL_CREDENTTIALS);

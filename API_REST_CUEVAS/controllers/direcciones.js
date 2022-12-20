@@ -225,15 +225,7 @@ const modificarDireccion = (req, res) => {
                     if (error) {
                         httpResponse(res, error = { "code": 500, "detailsError": error })
 
-                    } else if (resultadoInicio.length == 0) {
-                        var sinRegistros = {
-                            mensaje: mensajes.accionExitosa,
-                            resultado: "Sin registros"
-                        };
-
-                        res.status(200).json(sinRegistros);
-
-                    } else {
+                    }else {
 
                         res.status(204).json();
 
