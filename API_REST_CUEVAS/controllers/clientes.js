@@ -105,38 +105,41 @@ const getCliente = (req, res) => {
 }
 
 const registrarCliente = (req, res) => {
-    try {
+    try{
         const cliente = req.body;
         console.log(cliente)
+        var comprobacion = 'SELECT count(idUsuario) as Comprobacion FROM dbcuevas.usuario WHERE nombre = ? AND primerApellido = ? AND segundoApellido = ? AND correo = ? AND clave = ?'
         var query = 'CALL registrarCliente(?,?,?,?,?,?,?,?);'
 
-        const rondasDeSal = 10;
-        mysqlConnection.query(query, [cliente.nombre, cliente.primerApellido,
-                cliente.segundoApellido, cliente.correo,
-                cliente.clave, 3, cliente.noCelular, cliente.fechaNacimiento
-            ],
-            (error, resultadoRegistro) => {
-                if (error) {
+        mysqlConnection.query(comprobacion, [cliente.nombre, cliente.primerApellido,
+            cliente.segundoApellido, cliente.correo,
+            cliente.clave], (error, comp) =>{
+                if (error){
                     httpResponse(res, error = { "code": 500, "detailsError": error })
-                } else {
-                    console.log(resultadoRegistro)
-                    var clienteCreado;
-                    clienteCreado = {
-                        mensaje: mensajes.accionExitosa,
-                        'insertado': resultadoRegistro['affectedRows']
-                    }
-
-                    res.status(201).json(clienteCreado);
+                }else if (comp[0]['Comprobacion'] == 1){
+                    httpResponse(res, error = { "code": 422, "detailsError": "Registro repetido" })
+                }else{
+                    mysqlConnection.query(query, [cliente.nombre, cliente.primerApellido,
+                        cliente.segundoApellido, cliente.correo,
+                        cliente.clave, 3, cliente.noCelular, cliente.fechaNacimiento], (error, resultadoRegistro) =>{
+                            if (error){
+                                httpResponse(res, error = { "code": 500, "detailsError": "Hubo un error al registrar el cliente" })
+                            }else{
+                                console.log(resultadoRegistro)
+                                var clienteCreado;
+                                clienteCreado = {
+                                    mensaje: mensajes.accionExitosa,
+                                    'insertado': resultadoRegistro['affectedRows']
+                                }
+                        
+                                res.status(201).json(clienteCreado);
+                            }
+                    })
                 }
-            });
-
-
-
-    } catch (exception) {
+        })
+    }catch (error){
         httpResponse(res, error = { "code": 500, "detailsError": exception.message })
-
     }
-
 }
 
 // modificarPerfil 
@@ -187,3 +190,39 @@ const modificarCliente = (req, res) => {
 }
 
 module.exports = { getCliente, registrarCliente, modificarCliente, getClientes }
+
+
+
+
+/*mysqlConnection.query(query, [cliente.nombre, cliente.primerApellido,
+    cliente.segundoApellido, cliente.correo,
+    cliente.clave, 3, cliente.noCelular, cliente.fechaNacimiento
+],
+(error, resultadoRegistro) => {
+    if (error) {
+        httpResponse(res, error = { "code": 500, "detailsError": error })
+    } else {
+        console.log(resultadoRegistro)
+        var clienteCreado;
+        clienteCreado = {
+            mensaje: mensajes.accionExitosa,
+            'insertado': resultadoRegistro['affectedRows']
+        }
+
+        res.status(201).json(clienteCreado);
+    }
+});*/
+
+
+/*try {
+    
+
+    mysqlConnection.query(comprobacion, [cliente.nombre, cliente.primerApellido,
+        cliente.segundoApellido, cliente.correo,
+        cliente.clave], error, comprobacion) => {
+            if (error){
+                htpResponse(res, error = { "code": 500, "detailsError": error })
+            }else if (){
+
+            }
+        }*/

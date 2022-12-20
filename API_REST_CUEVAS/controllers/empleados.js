@@ -111,35 +111,40 @@ const getEmpleado = (req, res) => {
 const registrarEmpleado = (req, res) => {
     try {
         const token = req.headers["x-access-token"];
-        var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Administrador"); //cambiar Administrador
+        var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente")//Admin
 
-        if (respuesta.statusCode == 200) {
+        if (respuesta.statusCode == 200){
             const empleado = req.body
             console.log(empleado)
+            var comprobacion = 'SELECT count(idUsuario) as Comprobacion FROM dbcuevas.usuario WHERE nombre = ? AND primerApellido = ? AND segundoApellido = ? AND correo = ?'
             var query = "CALL registrarEmpleado(?,?,?,?,?,?,?,?,?);"
 
-            const rondasDeSal = 10;
-
-
-            mysqlConnection.query(query, [empleado.nombre, empleado.primerApellido, empleado.segundoApellido,
-                empleado.correo, empleado.clave, 2, empleado.fechaIngreso, empleado.idCargo, empleado.idSucursal
-            ], (error, resultadoRegistro) => {
-                if (error) {
+            mysqlConnection.query(comprobacion, [empleado.nombre, empleado.primerApellido, empleado.segundoApellido,
+                empleado.correo, empleado.clave], (error, comp) =>{
+                if (error){
                     httpResponse(res, error = { "code": 500, "detailsError": error })
-                } else {
-                    console.log(resultadoRegistro)
-                    var empleadoCreado
-
-                    empleadoCreado = {
-                        mensaje: mensajes.accionExitosa,
-                        'insertado': resultadoRegistro['affectedRows']
-                    }
-
-                    res.status(201).json(empleadoCreado);
+                }else if (comp[0]['Comprobacion'] == 1){
+                    httpResponse(res, error = { "code": 422, "detailsError": "Registro repetido" })
+                }else{
+                    mysqlConnection.query(query, [empleado.nombre, empleado.primerApellido, empleado.segundoApellido,
+                        empleado.correo, empleado.clave, 2, empleado.fechaIngreso, empleado.idCargo, empleado.idSucursal
+                    ], (error, resultadoRegistro) => {
+                        if (error) {
+                            httpResponse(res, error = { "code": 500, "detailsError": error })
+                        } else {
+                            console.log(resultadoRegistro)
+                            var empleadoCreado
+            
+                            empleadoCreado = {
+                                mensaje: mensajes.accionExitosa,
+                                'insertado': resultadoRegistro['affectedRows']
+                            }
+            
+                            res.status(201).json(empleadoCreado);
+                        }
+                    });
                 }
-            });
-
-
+            })
 
         } else if (respuesta.statusCode == 401) {
             res.status(401);
@@ -147,7 +152,7 @@ const registrarEmpleado = (req, res) => {
         } else {
             httpResponse(res, error = { "code": 500, "detailsError": "Hubo un problema al validar el token" })
         }
-    } catch (exception) {
+    } catch (error) {
         httpResponse(res, error = { "code": 500, "detailsError": exception.message })
     }
 }
@@ -197,3 +202,47 @@ const modificarEmpleado = (req, res) => {
 }
 
 module.exports = { getEmpleados, getEmpleado, registrarEmpleado, modificarEmpleado }
+
+
+
+/*try {
+    const token = req.headers["x-access-token"];
+    var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Administrador"); //cambiar Administrador
+
+    if (respuesta.statusCode == 200) {
+        const empleado = req.body
+        console.log(empleado)
+        var query = "CALL registrarEmpleado(?,?,?,?,?,?,?,?,?);"
+
+        const rondasDeSal = 10;
+
+
+        mysqlConnection.query(query, [empleado.nombre, empleado.primerApellido, empleado.segundoApellido,
+            empleado.correo, empleado.clave, 2, empleado.fechaIngreso, empleado.idCargo, empleado.idSucursal
+        ], (error, resultadoRegistro) => {
+            if (error) {
+                httpResponse(res, error = { "code": 500, "detailsError": error })
+            } else {
+                console.log(resultadoRegistro)
+                var empleadoCreado
+
+                empleadoCreado = {
+                    mensaje: mensajes.accionExitosa,
+                    'insertado': resultadoRegistro['affectedRows']
+                }
+
+                res.status(201).json(empleadoCreado);
+            }
+        });
+
+
+
+    } else if (respuesta.statusCode == 401) {
+        res.status(401);
+        httpResponse(res, error = { "code": 401, "detailsError": "" })
+    } else {
+        httpResponse(res, error = { "code": 500, "detailsError": "Hubo un problema al validar el token" })
+    }
+} catch (exception) {
+    httpResponse(res, error = { "code": 500, "detailsError": exception.message })
+}*/
