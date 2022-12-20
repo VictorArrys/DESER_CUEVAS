@@ -47,15 +47,15 @@
             <div class="col-md-5 mx-4">
                 <div>
                     <div class="row g-3 justify-content-center my-0">
-                        <form onsubmit="return modificar(event)" onload="getUsuario()">
+                        <form onsubmit="return modificar(event)">
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text" id="inputGroup-sizing-lg">Nombre</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" id="txt_nombreG">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" id="txt_nombreG" required>
                             </div>
                             <br>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text" id="inputGroup-sizing-lg">Apellido Paterno</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" id="txt_aPaternoG">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" id="txt_aPaternoG" required>
                             </div>
                             <br>
                             <div class="input-group input-group-lg">
@@ -65,26 +65,26 @@
                             <br>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text" id="inputGroup-sizing-lg">Correo</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" id="txt_correoG">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" id="txt_correoG" required>
                             </div>
                             <br>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text" id="inputGroup-sizing-lg">Clave</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" id="txt_claveG">
+                                <input type="password" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" id="txt_claveG" required>
                             </div>
                             <br>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text" id="inputGroup-sizing-lg">Celular</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" id="txt_celularG">
+                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" id="txt_celularG" required>
                             </div>
                             <br>
                             <div class="input-group input-group-lg">
                                 <span class="input-group-text" id="inputGroup-sizing-lg">Fecha Nacimiento</span>
-                                <input type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" id="txt_fNacimientoG">
+                                <input type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg" id="txt_fNacimientoG" required>
                             </div>
                             <br>
                             <br>
-                            <button type="button" class="btn btn-primary" id="btn_actualizar" onclick="getUsuario()">Actualizar Información</button>
+                            <button type="button" class="btn btn-primary" id="btn_actualizar" onclick="modificar()">Actualizar Información</button>
                         </form>
                     </div>
                 </div>

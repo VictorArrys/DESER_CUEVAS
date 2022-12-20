@@ -8,10 +8,6 @@ var parametro = new URLSearchParams(urlParametro);
 var idUsuario = parametro.get('idUsuario');
 
 
-
-
-
-// ! Validación de usuario para regresar al login si no esta logeado
 function validarUsuario() {
 
     usuario = JSON.parse(localStorage.getItem(idUsuario));
@@ -44,10 +40,9 @@ function getUsuario() {
     var aPaternoU = document.getElementById("txt_aPaternoG")
     var aMaternoU = document.getElementById("txt_aMaternoG")
     var correoU = document.getElementById("txt_correoG")
-    var claveU = document.getElementById("txt_celularG")
+    var claveU = document.getElementById("txt_claveG")
+    var celularU = document.getElementById("txt_celularG")
     var fechaNacimientoU = document.getElementById("txt_fNacimientoG")
-
-    alert("Prueba que a mi si me sirve xD")
 
     try {
 
@@ -56,7 +51,20 @@ function getUsuario() {
         request.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 var data = JSON.parse(this.response);
-                console.log(data)
+                console.log(data.resultadoInicio[0])
+                var registro = data.resultadoInicio[0]
+                
+                nombreU.value = registro.nombre
+                aPaternoU.value = registro.primerApellido
+                aMaternoU.value = registro.segundoApellido
+                correoU.value = registro.correo
+                claveU.value = registro.clave
+                celularU.value = registro.noCelular
+                var cad1 = registro.fechaNacimiento
+                cad1.toString();
+                let cad2 = cad1.substring(0, 10);
+                fechaNacimientoU.value = cad2
+                
             }
         };
         request.open('GET', URL_HOST + "/clientes/" + idUsuario, true)
@@ -75,29 +83,51 @@ function modificar() {
     var aPaternoU = document.getElementById("txt_aPaternoG").value
     var aMaternoU = document.getElementById("txt_aMaternoG").value
     var correoU = document.getElementById("txt_correoG").value
-    var claveU = document.getElementById("txt_celularG").value
+    var claveU = document.getElementById("txt_claveG").value
+    var celularU = document.getElementById("txt_celularG").value
     var fechaNacimientoU = document.getElementById("txt_fNacimientoG").value
 
     try {
-        alert(`jala`)
 
-
-        /*let modfUsuario = {
+        let modificarUsuario = {
             nombre: nombreU,
             primerApellido: aPaternoU,
             segundoApellido: aMaternoU,
             correo: correoU,
             clave: claveU,
+            tipo: 3,
+            noCelular: celularU,
             fechaNacimiento: fechaNacimientoU
-           }*/
+        }
+
+        var request = new XMLHttpRequest();
+        request.open('PATCH', URL_HOST + "/clientes/" + idUsuario, true)
+        request.setRequestHeader("Content-type", "application/json");
+        request.setRequestHeader("x-access-token", usuario.token);
+
+        request.onload = function() {
+            if (request.status >= 200 && request.status < 300) {
+                alert(`Usuario ${nombreU} actualizado con éxito`)
+                alert(`El usuario fue modificado, favor de iniciar sesión nuevamente`)
+                localStorage.removeItem(usuario.idUsuario);
+                setTimeout(() => {
+                    window.open('../index.html', '_self');
+                }, 1000)
+            }else if (request.status == 403){
+                alert(`Favor de comprobar que tus campos estén llenos`)
+            }
+        }
+        let uR = JSON.stringify(modificarUsuario)
+        request.send(uR)
+        
     } catch (error) {
         alert(`Ocurrió un error, intente más tarde o comuniquese con los profesionales`)
     }
 }
 
-/*function cerrarSesion() {
+function cerrarSesion() {
     localStorage.removeItem(usuario.idUsuario);
     setTimeout(() => {
         window.open('../index.html', '_self');
     }, 1000);
-}*/
+}

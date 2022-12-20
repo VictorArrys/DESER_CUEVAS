@@ -111,7 +111,7 @@ const getEmpleado = (req, res) => {
 const registrarEmpleado = (req, res) => {
     try {
         const token = req.headers["x-access-token"];
-        var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente")//Admin
+        var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Administrador")
 
         if (respuesta.statusCode == 200){
             const empleado = req.body
