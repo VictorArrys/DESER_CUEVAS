@@ -188,5 +188,4 @@ function cancelar(){
       "../vista_consumidor/productos.html?idUsuario=" + usuario.idUsuario,
       "_self"
     );
-
 }
