@@ -21,11 +21,12 @@ const consultarProductos = (req, res) => {
                         httpResponse(res, error = { "code": 500, "detailsError": error })
 
                     } else if (resultadoInicio.length == 0) {
-                        console.log(
-                            "¡Sin registros!"
-                        );
-                        //Si no hay registros podemos usar un 200 porque podría parecer que esta mal
-                        httpResponse(res, error = { "code": 404, "detailsError": "" })
+                        var sinRegistros = {
+                            mensaje: mensajes.accionExitosa,
+                            resultado: "Sin registros"
+                        };
+
+                        res.status(200).json(sinRegistros);
 
                     } else {
 
