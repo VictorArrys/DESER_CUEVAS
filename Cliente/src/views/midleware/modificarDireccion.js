@@ -73,7 +73,7 @@ function getDireccion(){
         request.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200){
                 var data = JSON.parse(this.response);
-                console.log(data.respuesta[0])
+                console.log(data)
                 var registro = data.respuesta[0]
 
                 calleG.value = registro.calle
