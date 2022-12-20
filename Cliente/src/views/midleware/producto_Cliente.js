@@ -29,8 +29,8 @@ function validarUsuario() {
         var urlCarritoCompras = document.getElementById("carritoCompras");
         urlCarritoCompras.href = "carritoCompras.html?idUsuario=" + idUsuario;
 
-        var urlCarritoCompras = document.getElementById("productos");
-        urlCarritoCompras.href = "productos.html?idUsuario=" + idUsuario;
+        var urlProductos = document.getElementById("productos");
+        urlProductos.href = "productos.html?idUsuario=" + idUsuario;
 
     } else {
         window.open('../index.html', '_self');
@@ -65,7 +65,6 @@ function cargarProducto() {
     };
     request.open("GET", URL_HOST + "/productos/sucursal/" + 1 + "/" + idProducto, true);
     request.setRequestHeader("Content-type", "application/json");
-
     request.setRequestHeader("x-access-token", usuario.token);
     request.send();
 }
@@ -109,12 +108,9 @@ function añadirCarrito() {
                         var respuestaRegistro = JSON.parse(this.response);
                         console.log(respuestaRegistro)
 
-                        if (!listaProductos == "Sin registros") {
-                            mostrarProductos(listaProductos);
-                        }
                     }
-                    if (this.response == 1) {
-                        alert("Producto agregado exitosamente");
+                    if (respuestaRegistro.insertado == 1) {
+                        alert("Se ha agregado exitosamente el producto: " + productoConsultado.nombreProducto);
 
                     } else {
                         alert("No fue posible realizar el registro del producto al carrito");
@@ -123,7 +119,7 @@ function añadirCarrito() {
                 }
                 request.send(JSON.stringify(agregarCarrito));
             } else {
-                alert("Actualmente solo contamos con " + cantidadExistencia + " items para este producto");
+                alert("Actualmente solo contamos con " + cantidadExistencia + " productos existentes de: " + productoConsultado.nombreProducto);
             }
 
         } else {

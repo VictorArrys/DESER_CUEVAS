@@ -1,5 +1,5 @@
 const { check } = require('express-validator')
-const {validateResults} = require('../handleValidator')
+const { validateResults } = require('../handleValidator')
 
 const validacionIdUsuario = [
     check('idUsuario')
@@ -11,7 +11,7 @@ const validacionIdUsuario = [
     }
 ];
 
-const validacionIdUsuarioInventario = [ 
+const validacionIdUsuarioInventario = [
     check('idUsuario')
     .exists()
     .notEmpty()
@@ -27,4 +27,4 @@ const validacionIdUsuarioInventario = [
 
 
 
-module.exports = { validacionIdUsuario , validacionIdUsuarioInventario}
+module.exports = { validacionIdUsuario, validacionIdUsuarioInventario }

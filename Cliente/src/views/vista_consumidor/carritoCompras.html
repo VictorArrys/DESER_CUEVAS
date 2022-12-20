@@ -84,62 +84,12 @@
         <div class="row mt-2">
             <div class="col-sm-3 me-auto">
                 <div class="d-grid gap-2">
-                    <button class="btn btn-primary me-md-2" type="button" onclick="seguirComprando()">Comprar Más</button>
+                    <button class="btn btn-primary me-md-2" type="button" onclick="seguirComprando()">Volver a productos</button>
                 </div>
             </div>
             <div class="col-sm-3 align-self-end">
                 <div class="d-grid gap-2">
-                    <button id="realizarPago" class="btn btn-warning" type="button" disabled>Realizar Pago</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal registrar reporte incidente -->
-    <div class="modal fade" id="nuevoReporte" tabindex="-1" aria-labelledby="nuevoReporteLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 id="txtTituloModal" class="modal-title">Reporta tu incidente</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form name="formularioRegistrarReporte">
-
-                        <div class="mb-3 visually-hidden">
-                            <input type="number" class="form-control form-control-sm" id="txtIdReporte">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="txtAsunto" class="form-label">Asunto</label>
-                            <input type="text" class="form-control form-control-sm" id="txtAsunto">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="txtComentarios" class="form-label">Comentarios</label>
-                            <textarea class="form-control" id="txtComentarios" rows="5"></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="" class="form-label">Ingrese una fotografía para respaldar su incidente</label>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="text-center">
-                                <img id="imagenReporteVista" class="visually-hidden" style="width: 150px;" alt="Imagen No Encontrada">
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <input class="form-control form-control-sm" id="txtImagenReporte" type="file" accept="image/*" onchange="visualizarImagenReporte()">
-                        </div>
-
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                            <button id="btnRegistraReporte" type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="registrarReporte()">Reportar</button>
-
-                        </div>
-                    </form>
+                    <button id="realizarPago" class="btn btn-warning" type="button" onclick="comprarProductos()">Realizar Pago</button>
                 </div>
             </div>
         </div>
@@ -152,24 +102,46 @@
 </button>
     <!-- Modal -->
     <div class="modal fade" id="confirmacion" tabindex="-1" aria-labelledby="confirmacionLabel" aria-hidden="true">
-        <div class="modal-dialog alert alert-danger">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="confirmacionLabel">Confirmar acción</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+
+                <div class="modal-body text-center">
+                    <form onsubmit="return registrar(event)">
+                        <div class="input-group mb-3">
+                            <select class="form-select" id="metodoPago" aria-label="Example select with button addon">
+                              <option selected>Ingrese su metodo de pago...</option>
+                              <option value="1"> Tarjeta de debito</option>
+                              <option value="2">Tarjeta de credito</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <select class="form-select" id="direcciones" aria-label="Example select with button addon">
+                             
+                            </select>
+                        </div>
+
+
+                    </form>
+                </div>
+
                 <div id="confirmacionBody" class="modal-body text-center">
+
                 </div>
                 <div class="modal-footer">
+
                     <button id="btnCerrarModalConfirmacion" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                    <button id="btnEliminarProducto" type="button" class="btn btn-primary btn-sm"></button>
+                    <button id="btnConfirmarCompra" type="button" class="btn btn-primary btn-sm" onclick="comprarProductos()"></button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script type="text/javascript" src="../logica/reporte.js"></script>
-    <script type="text/javascript" src="../logica/carritoCompras.js"></script>
+    <script type="text/javascript" src="../midleware/carritoCompras.js"></script>
 </body>
 
 </html>

@@ -1,30 +1,33 @@
 const URL_HOST = "http://localhost:3001/api/abarrotes_cuevas/1.0"
 
-var usuario;
 var listaProductos = "";
 var listaProductosAuxiliar = "";
+
+// ?
+var urlParametro = window.location.search;
+var parametro = new URLSearchParams(urlParametro);
+var idUsuario = parametro.get('idUsuario');
+var usuario = "";
+// ?
 
 // ! Validación de usuario para regresar al login si no esta logeado
 function validarUsuario() {
 
-    let miURL = document.location.href;
+    usuario = JSON.parse(localStorage.getItem(idUsuario));
 
-    if (miURL.indexOf('?') > 0) {
+    if (!usuario) {
+        window.open('../index.html', '_self');
+    } else if (usuario.tipo === "Administrador") {
 
-        let valorUser = miURL.split('?')[1];
+        let mostrarMensaje = document.getElementById("nombreCompleto");
 
-        let idUsuario = valorUser.split('=')[1];
+        mostrarMensaje.innerHTML = usuario.nombre;
 
-        usuario = JSON.parse(localStorage.getItem(idUsuario));
+        var urlUsuarios = document.getElementById("gestionUsuarios");
+        urlUsuarios.href = "../vista_administrador/productos.html?idUsuario=" + idUsuario;
 
-        if (!usuario) {
-            window.open('index.html', '_self');
-        } else if (usuario.tipo === "Administrador") {
-            let mostrarMensaje = document.getElementById("nombreCompleto");
-            mostrarMensaje.innerHTML = usuario.nombreCompleto;
-        }
     } else {
-        window.open('index.html', '_self');
+        window.open('../index.html', '_self');
     }
 }
 validarUsuario();

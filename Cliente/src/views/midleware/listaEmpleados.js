@@ -19,18 +19,17 @@ function validarUsuario() {
 
         if (!usuario) {
             window.open("../index.html", "_self");
-        } else if (usuario.tipo === "Cliente") {
+        } else if (usuario.tipo === "Administrador") {
             let mostrarMensaje = document.getElementById("nombreCompleto");
             mostrarMensaje.innerHTML = usuario.nombre;
 
             var urlEmpleados = document.getElementById("empleados");
             urlEmpleados.href =
-                "../vista_administrador/listaEmpleados.html?idUsuario=" +
+                "..views//vista_administrador/listaEmpleados.html?idUsuario=" +
                 usuario.idUsuario;
 
             var urlProductos = document.getElementById("productos");
-            urlProductos.href =
-                "../vista_administrador/productos.html?idUsuario=" + idUsuario;
+            urlProductos.href = "../vista_administrador/productos.html?idUsuario=" + idUsuario;
         }
     } else {
         window.open("../index.html", "_self");

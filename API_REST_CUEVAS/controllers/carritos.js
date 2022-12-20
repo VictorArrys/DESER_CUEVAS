@@ -164,7 +164,7 @@ const crearPedido = (req, res) => {
 
             var queryPedido = "INSERT INTO pedido(metodoPago, estatus, fechaHora, idUsuario, " +
                 "idDireccion,costoPedido) VALUES (?,?,?,?,?,?);"
-            var query = "CALL   crearPedido(?,?,?,?)"
+            var query = "CALL crearPedido(?,?,?,?)"
 
             mysqlConnection.query(
                 queryPedido, [productosPedido.metodoPagoP, productosPedido.estatusP, productosPedido.fechaHoraP,
@@ -174,12 +174,6 @@ const crearPedido = (req, res) => {
                     if (error) {
                         httpResponse(res, error = { "code": 500, "detailsError": error })
 
-                    } else if (resultadoInicio.length == 0) {
-                        console.log(
-                            "¡Sin registros!"
-                        );
-                        httpResponse(res, error = { "code": 404, "detailsError": "" })
-
                     } else {
                         var folio = resultadoInicio['insertId']
                         var productos = productosPedido.productos
@@ -187,25 +181,21 @@ const crearPedido = (req, res) => {
                         for (var i = 0; i < productos.length; i++) {
 
                             const productoDePedido = productos[i];
+                            console.log(productoDePedido)
                             mysqlConnection.query(
                                 query, [folio, productoDePedido.codigoBarrasP, productoDePedido.idInventarioP, productoDePedido.cantidadPedidoP],
                                 (error, resultadoInicio) => {
                                     if (error) {
                                         httpResponse(res, error = { "code": 500, "detailsError": error })
 
-                                    } else if (resultadoInicio.length == 0) {
-                                        console.log(
-                                            "¡Sin registros!"
-                                        );
-                                        httpResponse(res, error = { "code": 404, "detailsError": "" })
-
                                     }
                                 }
                             );
                         }
+
                         var pedidoCreado = {
                             mensaje: mensajes.accionExitosa,
-                            'insertado': resultadoInicio['affectedRows']
+                            'insertado': folio
                         };
                         res.status(201).json(pedidoCreado);
 
