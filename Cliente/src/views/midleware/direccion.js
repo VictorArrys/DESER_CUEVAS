@@ -1,4 +1,4 @@
-var URL_HOST = "http://localhost:3001/api/abarrotes_cuevas/1.0"
+var URL_HOST = "http://localhost:3000/api/abarrotes_cuevas/1.0"
 var usuario;
 var tokenCliente;
 
@@ -28,6 +28,10 @@ function validarUsuario() {
 
         var urlConsultarCliente = document.getElementById("consultarCliente");
         urlConsultarCliente.href = "../vistaUsuario/consultarCliente.html?idUsuario=" + idUsuario;
+
+        var urlRegistrarDireccion =document.getElementById("registrarDireccion");
+            urlRegistrarDireccion.href =
+              "../vistaUsuario/registrarDireccion.html?idUsuario=" + idUsuario;
 
     } else {
         window.open('../index.html', '_self');
