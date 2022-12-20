@@ -93,7 +93,7 @@ function cargarTablaProductos(productosLista) {
             let cellDescripcion = nuevaFila.insertCell();
             let cellModificar = nuevaFila.insertCell();
 
-            
+
             let idProducto = document.createTextNode(productosLista[key].codigoBarras);
             let nombre = document.createTextNode(productosLista[key].nombreProducto);
             let precioVenta = document.createTextNode("$" + productosLista[key].precioVenta);
@@ -186,14 +186,14 @@ function registrarProducto() {
     var producto = new FormData();
 
     producto.append("codigoBarras", txtCodigoBarras);
-    producto.append("descripcion", txtDescripcion);
-    producto.append("ciudad", "Xalapa");
-    producto.append("estatus", 1);
-    producto.append("precioVenta", txtPrecioVenta);
-    producto.append("precioCompra", txtPrecioCompra);
-    producto.append("idCategoria", selectCategoria);
-    producto.append("nombreProducto", txtProducto);
-    producto.append("imagen", imageProductoVista);
+            producto.append("descripcion", txtDescripcion);
+            producto.append("ciudad", "Xalapa");
+            producto.append("estatus", 1);
+            producto.append("precioVenta", txtPrecioVenta);
+            producto.append("precioCompra", txtPrecioCompra);
+            producto.append("idCatagoria", selectCategoria);
+            producto.append("nombre", txtProducto);
+            producto.append("imagen", imageProductoVista);
 
     var request = new XMLHttpRequest();
 
@@ -224,7 +224,7 @@ function registrarProducto() {
         }
     }
 
-    request.send(producto);
+    request.send(JSON.stringify(producto));
     return false;
 }
 
@@ -306,8 +306,8 @@ function guardarProductoModificado() {
             producto.append("estatus", 1);
             producto.append("precioVenta", txtPrecioVenta);
             producto.append("precioCompra", txtPrecioCompra);
-            producto.append("idCategoria", selectCategoria);
-            producto.append("nombreProducto", txtProducto);
+            producto.append("idCatagoria", selectCategoria);
+            producto.append("nombre", txtProducto);
             producto.append("imagen", imageProductoVista);
 
             var request = new XMLHttpRequest();
