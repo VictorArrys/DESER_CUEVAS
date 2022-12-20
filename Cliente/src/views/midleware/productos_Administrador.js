@@ -93,6 +93,7 @@ function cargarTablaProductos(productosLista) {
             let cellDescripcion = nuevaFila.insertCell();
             let cellModificar = nuevaFila.insertCell();
 
+            
             let idProducto = document.createTextNode(productosLista[key].codigoBarras);
             let nombre = document.createTextNode(productosLista[key].nombreProducto);
             let precioVenta = document.createTextNode("$" + productosLista[key].precioVenta);
