@@ -27,8 +27,8 @@ function validarUsuario() {
             window.open("../index.html", "_self");
         } else if (usuario.tipo === 'Administrador') {
 
-            let mostrarMensaje = document.getElementById("nombreAdmin");
-            mostrarMensaje.innerHTML = usuario.nombre;
+            let mostrarMensaje = document.getElementById("nombreCompleto");
+            mostrarMensaje.value = usuario.nombre;
 
             var urlEmpleados = document.getElementById("gestionarEmpleados");
             urlEmpleados.href =
@@ -48,7 +48,7 @@ validarUsuario();
 function cerrarSesion() {
     localStorage.removeItem(usuario.idUsuario);
     setTimeout(() => {
-        window.open('index.html', '_self');
+        window.open('../index.html', '_self');
     }, 1000);
 }
 
@@ -63,9 +63,8 @@ function cargarProductos() {
 
     request.onload = function() {
         if (request.status >= 200 && request.status < 300) {
-            let productos = JSON.parse(this.response);
-            listaProductos = productos;
-            // listaProductosAuxiliar = JSON.parse( JSON.stringify(listaProductosAuxiliar));
+            var productos = JSON.parse(this.response);
+            listaProductos = productos.resultado;
             console.log(listaProductos);
             cargarTablaProductos(listaProductos);
         }
@@ -117,7 +116,7 @@ function cargarTablaProductos(productosLista) {
             cellDescripcion.appendChild(descripcion);
             cellModificar.appendChild(btnModificar);
 
-            /*if (productosLista[key].ruta) {
+            /*if (productosLista[key].archivo) {
                 let inputImg = document.createElement("img");
                 inputImg.setAttribute("style", "width: 80px;");
                 inputImg.setAttribute("alt", "imgproducto");
@@ -141,24 +140,25 @@ function cargarComboCategoria() {
     var selectorCategorias = document.getElementById("selectorcategoria");
 
     var request = new XMLHttpRequest();
-
+    console.log(token);
     request.open('GET', URL_HOST + "/categorias", true);
     request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
     request.setRequestHeader("x-access-token", token);
 
     request.onload = function() {
         if (request.status >= 200 && request.status < 300) {
-            let categorias = JSON.parse(this.response);
+            var categorias = JSON.parse(this.response);
+            var listaCategorias = categorias.resultado;
 
             selectorCategorias.options.add(new Option("Todos", -1));
 
-            for (var key in categorias) {
+            for (var key in listaCategorias) {
 
                 if (categorias.hasOwnProperty(key)) {
 
-                    var opcionCategoria = new Option(categorias[key].nombreCategoria, categorias[key].idCategoria);
+                    var opcionCategoria = new Option(listaCategorias[key].nombreCategoria, listaCategorias[key].idCategoria);
                     selectCategoria.options.add(opcionCategoria);
-                    var opcionCategoriaDos = new Option(categorias[key].nombreCategoria, categorias[key].idCategoria);
+                    var opcionCategoriaDos = new Option(listaCategorias[key].nombreCategoria, listaCategorias[key].idCategoria);
                     selectorCategorias.options.add(opcionCategoriaDos);
                 }
             }

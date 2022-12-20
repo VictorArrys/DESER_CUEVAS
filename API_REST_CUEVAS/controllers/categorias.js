@@ -11,6 +11,10 @@ const consultarCategorias = (req, res) => {
         console.log(token)
         var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Cliente");
 
+        if(respuesta.statusCode == 401) {
+            var respuesta = GestionToken.ValidarTokenTipoUsuario(token, "Administrador");
+        }
+
         if (respuesta.statusCode == 200) {
 
             var query = "SELECT * FROM categoria"
