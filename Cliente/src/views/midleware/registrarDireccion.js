@@ -183,9 +183,9 @@ function cerrarSesion() {
     window.open("../index.html", "_self");
   }, 1000);
 }
-function cancelar(){
-    window.open(
-      "../vista_consumidor/productos.html?idUsuario=" + usuario.idUsuario,
-      "_self"
-    );
+function cancelar() {
+  window.open(
+    "../vista_consumidor/productos.html?idUsuario=" + usuario.idUsuario,
+    "_self"
+  );
 }
