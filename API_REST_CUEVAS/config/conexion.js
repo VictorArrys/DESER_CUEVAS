@@ -2,15 +2,15 @@ const mysql = require('mysql');
 
 const { promisify } = require('util');
 
-const { SERVER_CREDENTTIALS, LOCAL_CREDENTTIALS } = require('./credenciales');
+const {SERVER_CREDENTTIALS, LOCAL_CREDENTTIALS } = require('./credenciales');
 
 var pool;
 
 
-/*
+
 pool = mysql.createPool(SERVER_CREDENTTIALS);
 console.log("Configuracion de Base de datos en Server")
-*/
+
 
 pool = mysql.createPool(LOCAL_CREDENTTIALS);
 console.log("Configuracion de Base de datos en Localhost")
