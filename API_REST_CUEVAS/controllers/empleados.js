@@ -10,7 +10,7 @@ const getEmpleados = (req, res) => {
         var respuesta = GestionToken.ValidarToken(token);
         if (respuesta.statusCode == 200) {
             //var {celular} = req.params;
-            var query = "SELECT * FROM empleado INNER JOIN usuario ON usuario.idUsuario = empleado.idUsuario;"
+            var query = "SELECT empleado.*, sucursal.nombre FROM empleado INNER JOIN usuario ON usuario.idUsuario = empleado.idUsuario INNER JOIN sucursales ON empleado.idSucursal + sucursal.idSucursal;"
 
             mysqlConnection.query(query, (error, resultadoInicio) => {
                     if (error) {
