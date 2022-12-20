@@ -32,6 +32,9 @@ function registrar() {
                 usuarioRegistrado = JSON.parse(this.response)
                 alert(`Usuario ${nombreF} registrado con éxito`)
                 window.open('../views/index.html', '_self')
+            }else if (request.status == 422){
+                alert(`usuario ya registrado, intente de nuevo`)
+                window.open('../views/index.html', '_self')
             }
         }
         let uR = JSON.stringify(nuevoUsuario)
