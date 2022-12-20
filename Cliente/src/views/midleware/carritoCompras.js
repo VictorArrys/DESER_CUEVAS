@@ -128,69 +128,73 @@ function cargarTablaProductos(carritoEntrada) {
 
 
 function comprarProductos() {
+    if (productos.length == 0) {
+        alert("No puedes comprar si tu carrito esta vacio")
+    } else {
 
-    document.getElementById("confirmacionBody").innerHTML = 'Comprara todos los productos del carrito <br>' +
-        '<strong> ¿Comfirma que realizara la compra de los productos?</strong>';
-    document.getElementById("btnConfirmarCompra").innerHTML = 'Comprar';
+        document.getElementById("confirmacionBody").innerHTML = 'Comprara todos los productos del carrito <br>' +
+            '<strong> ¿Comfirma que realizara la compra de los productos?</strong>';
+        document.getElementById("btnConfirmarCompra").innerHTML = 'Comprar';
 
 
-    var btnSolicitarConfirmacion = document.getElementById("btnSolicitarConfirmacion");
-    btnSolicitarConfirmacion.click();
+        var btnSolicitarConfirmacion = document.getElementById("btnSolicitarConfirmacion");
+        btnSolicitarConfirmacion.click();
 
-    console.log(productos)
+        console.log(productos)
 
-    var btnConfirmarCompra = document.getElementById("btnConfirmarCompra");
+        var btnConfirmarCompra = document.getElementById("btnConfirmarCompra");
 
-    btnConfirmarCompra.addEventListener("click", function() {
+        btnConfirmarCompra.addEventListener("click", function() {
 
-        var request = new XMLHttpRequest();
+            var request = new XMLHttpRequest();
 
-        request.open('POST', URL_HOST + "/carritos/" + usuario.idUsuario, true);
+            request.open('POST', URL_HOST + "/carritos/" + usuario.idUsuario, true);
 
-        request.onload = function() {
-            if (request.status >= 200 && request.status < 300) {
+            request.onload = function() {
+                if (request.status >= 200 && request.status < 300) {
 
-                let mostrarMensaje = document.getElementById("mostrarMensaje");
+                    let mostrarMensaje = document.getElementById("mostrarMensaje");
 
-                if (this.response == 1) {
+                    if (this.response == 1) {
 
-                    mostrarMensaje.innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert">' +
-                        '<strong id="mensajeAlerta"> Se realizo la compra de los productos y guardo en pedidos </strong>' +
-                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                        '</div>';
-                    cargarProductos()
+                        mostrarMensaje.innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert">' +
+                            '<strong id="mensajeAlerta"> Se realizo la compra de los productos y guardo en pedidos </strong>' +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                            '</div>';
+                        cargarProductos()
 
-                } else {
-                    mostrarMensaje.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
-                        '<strong id="mensajeAlerta"> No se pudo completar la compra de los productos </strong>' +
-                        '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
-                        '</div>';
+                    } else {
+                        mostrarMensaje.innerHTML = '<div class="alert alert-danger alert-dismissible fade show" role="alert">' +
+                            '<strong id="mensajeAlerta"> No se pudo completar la compra de los productos </strong>' +
+                            '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                            '</div>';
+                    }
                 }
             }
-        }
 
-        var metodoPago = document.getElementById("metodoPago");
-        var direcciones = document.getElementById("metodoPago");
-        var fechaPedido = new Date().toJSON().slice(0, 19).replace('T', ' ');
+            var metodoPago = document.getElementById("metodoPago");
+            var direcciones = document.getElementById("metodoPago");
+            var fechaPedido = new Date().toJSON().slice(0, 19).replace('T', ' ');
 
-        let bodyPedido = JSON.stringify({
-            metodoPagoP: metodoPago.value,
-            estatusP: 0,
-            fechaHoraP: fechaPedido,
-            idDireccionP: direcciones.value,
-            costoPedidoP: totalPrecioProducto,
-            productos: productos
-        })
+            let bodyPedido = JSON.stringify({
+                metodoPagoP: metodoPago.value,
+                estatusP: 0,
+                fechaHoraP: fechaPedido,
+                idDireccionP: direcciones.value,
+                costoPedidoP: totalPrecioProducto,
+                productos: productos
+            })
 
-        request.setRequestHeader("Content-type", "application/json");
-        request.setRequestHeader("x-access-token", usuario.token);
-        console.log(bodyPedido)
+            request.setRequestHeader("Content-type", "application/json");
+            request.setRequestHeader("x-access-token", usuario.token);
+            console.log(bodyPedido)
 
-        request.send(bodyPedido);
-        var btnCerrarModalConfirmacion = document.getElementById("btnCerrarModalConfirmacion");
-        btnCerrarModalConfirmacion.click();
+            request.send(bodyPedido);
+            var btnCerrarModalConfirmacion = document.getElementById("btnCerrarModalConfirmacion");
+            btnCerrarModalConfirmacion.click();
 
-    });
+        });
+    }
 }
 
 function calcularPrecioProducto(cantidadProducto, precioProducto) {
