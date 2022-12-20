@@ -5,58 +5,6 @@ var idUsuario
 var usuario;
 
 
-/*function validarUsuario() {
-    let miURL = document.location.href;
-  
-    if (miURL.indexOf("?") > 0) {
-      let valorUser = miURL.split("?")[1];
-      let parametros = miURL.split("?")[1];
-  
-      let idUsuario = valorUser.split("=")[1];
-      let valorIdDireccion = parametros.split("&")[1];
-
-      idDireccion = valorIdDireccion.split("=")[1];
-  
-      usuario = JSON.parse(localStorage.getItem(idUsuario));
-      console.log("usuraio");
-  
-      if (!usuario) {
-        window.open("../index.html", "_self");
-      } else if (usuario.tipo === "Cliente") {
-        var urlCarritoCompras = document.getElementById("carritoCompras");
-        urlCarritoCompras.href =
-          "../vista_consumidor/carritoCompras.html?idUsuario=" +
-          usuario.idUsuario;
-  
-        var urlProductos = document.getElementById("productos");
-        urlProductos.href =
-          "../vista_consumidor/productos.html?idUsuario=" + idUsuario;
-  
-        var urlConsultarCliente = document.getElementById("consultarCliente");
-        urlConsultarCliente.href =
-          "../vistaUsuario/consultarCliente.html?idUsuario=" + idUsuario;
-  
-        var urlConsultarDirecciones = document.getElementById(
-          "consultarDirecciones"
-        );
-        urlConsultarDirecciones.href =
-          "../vistaUsuario/consultarDirecciones.html?idUsuario=" + idUsuario;
-  
-  
-        var urlRegistrarDireccion = document.getElementById("registrarDireccion");
-        urlRegistrarDireccion.href =
-          "../vistaUsuario/registrarDireccion.html?idUsuario=" + idUsuario;
-  
-        var urlProductosBoton = document.getElementById("btn_cancelar");
-        urlProductosBoton.href =
-          "../vistaUsuario/registrarDireccion.html?idUsuario=" + idUsuario;
-      }
-    } else {
-      window.open("../index.html", "_self");
-    }
-  }
-  validarUsuario();*/
-
 // ! Validación de usuario para regresar al login si no esta logeado
 function validarUsuario() {
   let miURL = document.location.href;
@@ -129,10 +77,10 @@ function getDireccion(){
                 var registro = data.respuesta[0]
 
                 calleG.value = registro.calle
-                numExtG.value = registro.noExterior
-                numIntG.value = registro.noInterior
+                numExtG.value = parseInt(registro.noExterior)
+                numIntG.value = parseInt(registro.noInterior)
                 coloniaG.value = registro.colonia
-                codigoPG.value = registro.codigoPostal
+                codigoPG.value = parseInt(registro.codigoPostal)
                 municipioG.value = registro.municipio
                 entidadG.value = registro.entidadFederativa
             }
@@ -163,10 +111,10 @@ function modificarDireccion (){
         
         let modificarDireccion = {
             calle: calleM,
-            noExterior: numExtM,
-            noInterior: numIntM,
+            noExterior: parseInt(numExtM),
+            noInterior: parseInt(numIntM),
             colonia: coloniaM,
-            codigoPostal: codigoPM,
+            codigoPostal: parseInt(codigoPM),
             municipio: municipioM,
             entidadFederativa: entidadM,
             latitud: "0,0,0,0,0",
@@ -176,7 +124,7 @@ function modificarDireccion (){
 
         console.log(usuario.token)
         var request = new XMLHttpRequest();
-        request.open('PATCH', URL_HOST + "/direcciones/" + usuario.idUsuario, true)
+        request.open('PATCH', URL_HOST + "/direcciones/" + idDireccion, true)
         request.setRequestHeader("Content-type", "application/json");
         request.setRequestHeader("x-access-token", usuario.token);
 
