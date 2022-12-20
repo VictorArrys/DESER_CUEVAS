@@ -32,6 +32,9 @@ function validarUsuario() {
             var urlConsultarCliente = document.getElementById("consultarCliente");
             urlConsultarCliente.href = "../vistaUsuario/consultarCliente.html?idUsuario=" + idUsuario;
 
+            var urlConsultarDirecciones = document.getElementById("consultarDirecciones");
+            urlConsultarDirecciones.href = "../vistaUsuario/consultarDirecciones.html?idUsuario=" + idUsuario;
+
         }
     } else {
         window.open('../index.html', '_self');
