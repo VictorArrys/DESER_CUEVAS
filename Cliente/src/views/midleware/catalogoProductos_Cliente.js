@@ -61,7 +61,7 @@ function cargarProductos() {
             var data = JSON.parse(this.response);
             listaProductos = data.resultado;
             console.log(listaProductos)
-
+            mostrarProductos(listaProductos);
             if (!listaProductos == "Sin registros") {
                 mostrarProductos(listaProductos);
             }
@@ -79,9 +79,10 @@ function cargarProductos() {
 function mostrarProductos(data) {
 
     for (var i = 0; i < data.length; i++) {
-
-        var producto = data[0]
-        var imagen = data[0].archivo
+        console.log(data[i])
+        var producto = data[i]
+        var imagen = producto.archivo
+        console.log(imagen)
 
         var card = `<div class="col">
                         <div class="card" style="min-height: 300px;">
@@ -106,6 +107,7 @@ function cargarCategorias() {
     request.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             var data = JSON.parse(this.response);
+            console.log(data.resultadoInicio)
             mostrarCategorias(data.resultadoInicio);
         }
     };
