@@ -30,6 +30,10 @@ function validarUsuario() {
         var urlConsultarDirecciones = document.getElementById("consultarDirecciones");
         urlConsultarDirecciones.href = "../vistaUsuario/consultarDirecciones.html?idUsuario=" + idUsuario;
 
+        var urlRegistrarDireccion =document.getElementById("registrarDireccion");
+            urlRegistrarDireccion.href =
+              "../vistaUsuario/registrarDireccion.html?idUsuario=" + idUsuario;
+
     } else {
         window.open('../index.html', '_self');
     }

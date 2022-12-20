@@ -29,6 +29,10 @@ function validarUsuario() {
         var urlConsultarCliente = document.getElementById("consultarCliente");
         urlConsultarCliente.href = "../vistaUsuario/consultarCliente.html?idUsuario=" + idUsuario;
 
+        var urlRegistrarDireccion =document.getElementById("registrarDireccion");
+            urlRegistrarDireccion.href =
+              "../vistaUsuario/registrarDireccion.html?idUsuario=" + idUsuario;
+
     } else {
         window.open('../index.html', '_self');
     }
