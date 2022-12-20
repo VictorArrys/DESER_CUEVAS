@@ -100,7 +100,7 @@ function cargarEmpleados() {
                     celdaSegundoApellido.innerHTML =
                         empleados.resultadoInicio[key].segundoApellido;
                     celdaCargo.innerHTML = cargos[empleados.resultadoInicio[key].idCargo];
-                    celdaSucursal.innerHTML = empleados.resultadoInicio[key].idSucursal;
+                    celdaSucursal.innerHTML = empleados.resultadoInicio[key].sucursal;
 
                     filaEmpleado.appendChild(celdaNombre);
                     filaEmpleado.appendChild(celdaPrimerApellido);
