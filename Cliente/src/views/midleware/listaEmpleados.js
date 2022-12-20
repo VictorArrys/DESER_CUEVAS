@@ -1,55 +1,53 @@
 var URL_HOST = "http://localhost:3001/api/abarrotes_cuevas/1.0";
-var token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzdWFyaW8iOjIsImNvcnJlbyI6ImxldmF0aG9zMTZAZ21haWwuY29tIiwidGlwbyI6IkFkbWluaXN0cmFkb3IiLCJpYXQiOjE2NzE0ODYxODUsImV4cCI6MTY3MTQ5MzM4NX0._MkDB_k7g21IKAiwQjy7dy26jk0gizOUaAa3LW8Sl_s";
-
+var token;
 var cargos = { 1: "Administrador", 2: "Ejecutivo de ventas", 3: "Repartidor" };
 
 var usuario;
 
 // ! Validación de usuario para regresar al login si no esta logeado
 function validarUsuario() {
-
     let miURL = document.location.href;
 
-    if (miURL.indexOf('?') > 0) {
+    if (miURL.indexOf("?") > 0) {
+        let valorUser = miURL.split("?")[1];
 
-        let valorUser = miURL.split('?')[1];
-
-        let idUsuario = valorUser.split('=')[1];
+        let idUsuario = valorUser.split("=")[1];
 
         usuario = JSON.parse(localStorage.getItem(idUsuario));
 
+        token = usuario.token;
+
         if (!usuario) {
-            window.open('../index.html', '_self');
+            window.open("../index.html", "_self");
         } else if (usuario.tipo === "Cliente") {
             let mostrarMensaje = document.getElementById("nombreCompleto");
             mostrarMensaje.innerHTML = usuario.nombre;
 
             var urlEmpleados = document.getElementById("empleados");
-            urlEmpleados.href = "../views/vista_administrador/listaEmpleados.html?idUsuario=" + usuario.idUsuario;
+            urlEmpleados.href =
+                "../vista_administrador/listaEmpleados.html?idUsuario=" +
+                usuario.idUsuario;
 
             var urlProductos = document.getElementById("productos");
-            urlProductos.href = "../views/vista_administrador/productos.html?idUsuario=" + idUsuario;
-
+            urlProductos.href =
+                "../vista_administrador/productos.html?idUsuario=" + idUsuario;
         }
     } else {
-        window.open('../index.html', '_self');
+        window.open("../index.html", "_self");
     }
 }
 validarUsuario();
 
-
 function cerrarSesion() {
     localStorage.removeItem(usuario.idUsuario);
     setTimeout(() => {
-        window.open('../index.html', '_self');
+        window.open("../index.html", "_self");
     }, 1000);
 }
 
-
-
 window.onload = function() {
     cargarEmpleados();
+    console.log("informacion usuario: " + JSON.stringify(usuario));
 };
 
 function cargarEmpleados() {
@@ -66,7 +64,7 @@ function cargarEmpleados() {
             empleados = JSON.parse(this.response);
 
             if (empleados.length === 0) {
-                alert("No hay empleados registradas");
+                alert("No hay empleados registrados");
             } else {
                 console.log(empleados.resultadoInicio);
 
@@ -74,11 +72,7 @@ function cargarEmpleados() {
                     var filaEmpleado = document.createElement("tr");
                     filaEmpleado.id = empleados.resultadoInicio[key].idUsuario;
                     filaEmpleado.onclick = function() {
-                        //console.log(this.id);
-                        window.location = "prueba.html";
-
                         localStorage.setItem("idUsuario", this.id);
-                        //localStorage.setItem(sesion.idUsuario, JSON.stringify(sesion));
                         window.open("./editarEmpleado.html?idUsuario=" + this.id, "_self");
                     };
 
@@ -113,4 +107,14 @@ function cargarEmpleados() {
     request.send();
 
     return false;
+}
+
+function registrarEmpleado() {
+
+    localStorage.setItem("idUsuario", usuario.idUsuario);
+    localStorage.setItem(usuario.idUsuario, JSON.stringify(usuario));
+    window.open(
+        "./registrarEmpleado.html?idUsuario=" + usuario.idUsuario,
+        "_self"
+    );
 }

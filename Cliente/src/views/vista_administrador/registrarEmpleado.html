@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <script type="text/javascript" src="../midleware/registrarEmpleado.js"></script>
+    <link href="../css/estilo.css" rel="stylesheet">
     <title>Registrar Empleado</title>
 </head>
 
@@ -25,13 +26,10 @@
             <div class="collapse navbar-collapse" id="navbarMenu">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="empleados.html">Empleados</a>
+                        <a id="empleados" class="nav-link" aria-current="page">Empleados</a>
                     </li>
                     <li class="nav-item">
-                        <a id="productos" class="nav-link" aria-current="page">Sucursales</a>
-                    </li>
-                    <li class="nav-item">
-                        <a id="carritoCompras" class="nav-link" aria-current="page">Productos</a>
+                        <a id="productos" class="nav-link" aria-current="page">Productos</a>
                     </li>
 
                 </ul>
@@ -100,7 +98,7 @@
             </div>
             <div class="d-grid gap-2">
                 <input type="submit" value="Registrar" class="btn btn-success mt-2" onclick="registrarEmpleado()" />
-                <button class="btn btn-secondary" onclick="">Cancelar</button>
+                <button class="btn btn-secondary" onclick="cancelar()">Cancelar</button>
             </div>
         </form>
     </div>
