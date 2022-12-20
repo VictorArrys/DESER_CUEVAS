@@ -35,42 +35,45 @@ function registrarEmpleado() {
   validarDatos();
 
   ////////////////////////////////
-
-  try {
-    let nuevoEmpleado = {
-      nombre: nombre,
-      primerApellido: primerApellido,
-      segundoApellido: segundoApellido,
-      correo: correo,
-      clave: contrasena,
-      tipo: tipo,
-      fechaIngreso: fechaIngreso,
-      idCargo: cargo,
-      idSucursal: sucursal,
-    };
-
-    console.log(nuevoEmpleado);
-
-    var request = new XMLHttpRequest();
-    request.open("POST", URL_HOST + "/empleados", true);
-    request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-    request.setRequestHeader("x-access-token", token);
-
-    let empleadoRegistrado;
-    request.onload = function () {
-      if (request.status >= 200 && request.status < 300) {
-        empleadoRegistrado = JSON.parse(this.response);
-        alert("Usuario " + nombre + " registrado con éxito");
-      }
-    };
-    let cuerpoPeticion = JSON.stringify(nuevoEmpleado);
-    request.send(cuerpoPeticion);
-  } catch (error) {
-    alert(
-      "Ocurrió un error, intente más tarde o comuniquese con los profesionales"
-    );
+  if (!validarDatos()) {
+    alert("Datos invalidos")
   }
+  else {
+    try {
+      let nuevoEmpleado = {
+        nombre: nombre,
+        primerApellido: primerApellido,
+        segundoApellido: segundoApellido,
+        correo: correo,
+        clave: contrasena,
+        tipo: tipo,
+        fechaIngreso: fechaIngreso,
+        idCargo: cargo,
+        idSucursal: sucursal,
+      };
 
+      console.log(nuevoEmpleado);
+
+      var request = new XMLHttpRequest();
+      request.open("POST", URL_HOST + "/empleados", true);
+      request.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+      request.setRequestHeader("x-access-token", token);
+
+      let empleadoRegistrado;
+      request.onload = function () {
+        if (request.status >= 200 && request.status < 300) {
+          empleadoRegistrado = JSON.parse(this.response);
+          alert("Usuario " + nombre + " registrado con éxito");
+        }
+      };
+      let cuerpoPeticion = JSON.stringify(nuevoEmpleado);
+      request.send(cuerpoPeticion);
+    } catch (error) {
+      alert(
+        "Ocurrió un error, intente más tarde o comuniquese con los profesionales"
+      );
+    }
+  }
   ////////////////////////
 
   return false;
@@ -91,6 +94,8 @@ function validarDatos() {
   let cargo = document.getElementById("slt_Cargo");
   let sucursal = document.getElementById("slt_Sucursal");
 
+  let datosValidos = true;
+
   validarCorreo(correo.value)
     ? (correo.style.borderColor = "green")
     : (correo.style.borderColor = "red");
@@ -98,6 +103,20 @@ function validarDatos() {
   validarNombre(nombre.value)
     ? (nombre.style.borderColor = "green")
     : (nombre.style.borderColor = "red");
+
+  primerApellido.value != "" ? primerApellido.style.borderColor = "green" : primerApellido.style.borderColor = "red";
+  segundoApellido.value != "" ? segundoApellido.style.borderColor = "green" : segundoApellido.style.borderColor = "red";
+  fechaIngreso.value != "" ? fechaIngreso.style.borderColor = "green" : fechaIngreso.style.borderColor = "red";
+  contrasena.value != "" ? contrasena.style.borderColor = "green" : contrasena.style.borderColor = "red";
+
+  datosValidos = validarCorreo(correo.value) && datosValidos;
+  datosValidos = validarNombre(nombre.value) && datosValidos;
+  datosValidos = primerApellido.value != "" && datosValidos;
+  datosValidos = segundoApellido.value != "" && datosValidos;
+  datosValidos = fechaIngreso.value != "" && datosValidos;
+  datosValidos = contrasena.value != "" && datosValidos;
+
+  return datosValidos;
 }
 
 function validarCorreo(correo) {
