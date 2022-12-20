@@ -183,17 +183,17 @@ function registrarProducto() {
     let txtPrecioCompra = formularioEditarProducto.txtPrecioCompra.value;
     let selectCategoria = formularioEditarProducto.selectCategoria.value;
 
-    var producto = new FormData();
-
-    producto.append("codigoBarras", txtCodigoBarras);
-            producto.append("descripcion", txtDescripcion);
-            producto.append("ciudad", "Xalapa");
-            producto.append("estatus", 1);
-            producto.append("precioVenta", txtPrecioVenta);
-            producto.append("precioCompra", txtPrecioCompra);
-            producto.append("idCatagoria", selectCategoria);
-            producto.append("nombre", txtProducto);
-            producto.append("imagen", imageProductoVista);
+    let bodyProducto = JSON.stringify({
+        codigoBarras: txtCodigoBarras,
+        descripcion: txtDescripcion,
+        ciudad: "Xalapa",
+        estatus: 1,
+        precioVenta: txtPrecioVenta,
+        precioCompra: txtPrecioCompra,
+        idCatagoria: selectCategoria,
+        nombre : txtProducto,
+        imagen : imageProductoVista
+    })
 
     var request = new XMLHttpRequest();
 
@@ -203,14 +203,16 @@ function registrarProducto() {
         if (request.status >= 200 && request.status < 300) {
 
             let mostrarMensaje = document.getElementById("mostrarMensaje");
-
-            if (this.response == 1) {
+            console.log(this.response);
+            /*
+            
+            if (this.response.respuesta == 1) {
 
                 mostrarMensaje.innerHTML = '<div class="alert alert-success alert-dismissible fade show" role="alert">' +
                     '<strong id="mensajeAlerta"> Se registro el Producto</strong>' +
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
                     '</div>';
-                resetearModal();
+                //resetearModal();
                 cargarProductos();
                 let botonClic = document.getElementById("btnCancelar");
                 botonClic.click();
@@ -221,11 +223,15 @@ function registrarProducto() {
                     '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
                     '</div>';
             }
+
+            */
         }
     }
+    
+    request.setRequestHeader("Content-type", "application/json");
+    request.setRequestHeader("x-access-token", usuario.token);
+    request.send(bodyProducto);
 
-    request.send(JSON.stringify(producto));
-    return false;
 }
 
 function modificarProducto(codigoBarras) {
