@@ -100,3 +100,11 @@ function getDirecciones(){
     }
 }
 getDirecciones();
+
+
+function cerrarSesion() {
+    localStorage.removeItem(usuario.idUsuario);
+    setTimeout(() => {
+      window.open("../index.html", "_self");
+    }, 1000);
+  }
