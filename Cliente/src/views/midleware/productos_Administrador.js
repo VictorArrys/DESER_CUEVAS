@@ -226,7 +226,7 @@ function registrarProducto() {
     return false;
 }
 
-function modificarProducto(idProducto) {
+function modificarProducto(codigoBarras) {
 
     let btnModificarProducto = document.getElementById("btnRegistrarNuevoProducto");
     btnModificarProducto.click();
@@ -257,10 +257,10 @@ function modificarProducto(idProducto) {
 
                 formularioIniciarSesion.txtCodigoBarras.value = listaProductos[key].codigoBarras;
                 formularioIniciarSesion.txtProducto.value = listaProductos[key].nombreProducto;
-                formularioIniciarSesion.txtDescripcion = listaProductos[key].descripcion;
+                formularioIniciarSesion.txtDescripcion.value = listaProductos[key].descripcion;                ;
                 formularioIniciarSesion.txtPrecioVenta.value = listaProductos[key].precioVenta;
                 formularioIniciarSesion.txtPrecioCompra.value = listaProductos[key].precioCompra;
-                formularioIniciarSesion.selectCategoria.value = listaProductos[key].idCategoria;
+                //formularioIniciarSesion.selectCategoria.value = listaProductos[key].idCatAgoria;
 
                 
 
