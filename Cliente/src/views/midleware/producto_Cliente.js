@@ -4,7 +4,8 @@ const URL_HOST = "http://localhost:3001/api/abarrotes_cuevas/1.0"
 var urlParametro = window.location.search;
 var parametro = new URLSearchParams(urlParametro);
 var idUsuario = parametro.get('idUsuario');
-var idProducto = parametro.get('idProducto');
+var idProducto = parametro.get('idProducto')
+console.log(idProducto)
 var usuario = "";
 // ?
 
@@ -60,6 +61,7 @@ function cargarProducto() {
             productoConsultado = respuesta.resultado[0];
             precioProducto = productoConsultado.precioVenta;
             cantidadExistencia = productoConsultado.cantidad;
+            console.log(productoConsultado)
             mostrarProducto(productoConsultado);
         }
     };

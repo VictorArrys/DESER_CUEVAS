@@ -69,9 +69,9 @@ const consultarCatalogoProducto = (req, res) => {
 
         if (respuesta.statusCode == 200) {
             const { idSucursal, idProducto } = req.params
-            var query = "SELECT productoCatalogo.*,categoria.nombreCategoria FROM productoCatalogo " +
-                "INNER JOIN categoria ON productoCatalogo.idCatagoria = categoria.idCategoria WHERE idSucursal = ? AND estatus = 1 AND " +
-                " productoCatalogo.codigoBarras = ?;"
+            var query = "SELECT productocatalogo2.*,categoria.nombreCategoria FROM productocatalogo2 " +
+                "INNER JOIN categoria ON productocatalogo2.idCatagoria = categoria.idCategoria WHERE idSucursal = ? AND estatus = 1 AND " +
+                " productocatalogo2.codigoBarras = ?;"
 
             mysqlConnection.query(
                 query, [idSucursal, idProducto],
@@ -125,8 +125,8 @@ const consultarCatalogoProductos = (req, res) => {
 
         if (respuesta.statusCode == 200) {
             const { idSucursal } = req.params
-            var query = "SELECT productoCatalogo.*,categoria.nombreCategoria FROM productoCatalogo " +
-                "INNER JOIN categoria ON productoCatalogo.idCatagoria = categoria.idCategoria WHERE idSucursal = ? AND estatus = 1";
+            var query = "SELECT productocatalogo2.*,categoria.nombreCategoria FROM productocatalogo2 " +
+                "INNER JOIN categoria ON productocatalogo2.idCatagoria = categoria.idCategoria WHERE idSucursal = ? AND estatus = 1";
 
             mysqlConnection.query(
                 query, [idSucursal],
