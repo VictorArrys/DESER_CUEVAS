@@ -148,13 +148,14 @@ function cargarComboCategoria() {
     request.onload = function() {
         if (request.status >= 200 && request.status < 300) {
             var categorias = JSON.parse(this.response);
-            var listaCategorias = categorias.resultado;
+            console.log(categorias)
+            var listaCategorias = categorias.resultadoInicio;
 
             selectorCategorias.options.add(new Option("Todos", -1));
 
             for (var key in listaCategorias) {
 
-                if (categorias.hasOwnProperty(key)) {
+                if (listaCategorias.hasOwnProperty(key)) {
 
                     var opcionCategoria = new Option(listaCategorias[key].nombreCategoria, listaCategorias[key].idCategoria);
                     selectCategoria.options.add(opcionCategoria);
@@ -260,9 +261,8 @@ function modificarProducto(codigoBarras) {
                 formularioIniciarSesion.txtDescripcion.value = listaProductos[key].descripcion;                ;
                 formularioIniciarSesion.txtPrecioVenta.value = listaProductos[key].precioVenta;
                 formularioIniciarSesion.txtPrecioCompra.value = listaProductos[key].precioCompra;
-                //formularioIniciarSesion.selectCategoria.value = listaProductos[key].idCatAgoria;
+                formularioIniciarSesion.selectCategoria.value = listaProductos[key].idCatAgoria;
 
-                
 
                 return;
             }
